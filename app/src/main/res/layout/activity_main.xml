@@ -1,0 +1,2312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/gradient_3"
+    tools:context=".MainActivity">
+
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:orientation="vertical"
+                    android:background="#ffffff"
+                    android:paddingHorizontal="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/logout"
+                        android:layout_marginVertical="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:src="@drawable/novawalk"
+                        tools:ignore="NotSibling" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingLeft="20dp"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:layout_width="110dp"
+                            android:layout_height="110dp"
+                            android:src="@drawable/me"></de.hdodenhof.circleimageview.CircleImageView>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            tools:visibility="visible">
+                        </LinearLayout>
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <LinearLayout
+                                android:layout_height="wrap_content"
+                                android:layout_width="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                >
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/zoika"
+                                    android:gravity="center"
+                                    android:text="Tecnico:"
+                                    android:textColor="#ffffff"
+                                    android:textSize="39sp"
+                                    tools:visibility="visible" />
+                                <ImageView
+                                    app:layout_constraintRight_toRightOf="parent"
+                                    android:id="@+id/logout"
+                                    android:layout_marginVertical="20dp"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:src="@drawable/cerrar_sesion"
+                                    android:layout_marginLeft="10dp"
+                                    />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/usernametech"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="5dp"
+                                android:fontFamily="@font/zoika"
+                                android:gravity="center"
+                                android:text="Victor Moreno"
+                                android:textColor="#ffffff"
+                                android:textSize="26sp"
+                                tools:visibility="visible" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+
+<!--                <ImageView-->
+<!--                    android:layout_marginTop="5dp"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="50dp"-->
+<!--                    android:src="@drawable/nativawhite_e1563204696938"-->
+<!--                    />-->
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:textColor="#ffffff"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="@font/zoika"
+                    android:textSize="30sp"
+                    android:background="#C64E53"
+                    android:id="@+id/print"
+                    android:text="Lista De Casos"
+                    android:textAllCaps="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Region: Caracas"
+                    android:fontFamily="@font/zoika"
+                    android:textAlignment="center"
+                    android:textSize="25sp"
+                    android:layout_marginVertical="4dp"
+                    android:textColor="#fff"
+                    android:textFontWeight="600"
+                    android:id="@+id/region_name"
+                    />
+
+                <LinearLayout
+                    android:id="@+id/cases"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="30dp"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:background="#ffffff"
+                    android:layout_width="match_parent"
+                    android:layout_height="600dp">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/classes"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
+                    <TextView
+                        android:text="#fff"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/profile_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintLeft_toLeftOf="parent"
+
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+<!--                            <TextView-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_marginTop="20dp"-->
+<!--                                android:fontFamily="@font/opensans"-->
+<!--                                android:gravity="center"-->
+<!--                                android:padding="10dp"-->
+<!--                                android:text="Celulas Tecnicas Disponibles"-->
+<!--                                android:textColor="#fff"-->
+<!--                                android:textSize="26sp" />-->
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/tech_media"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:orientation="horizontal"-->
+<!--                    android:padding="20dp"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/profile_layout">-->
+
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="90dp"-->
+<!--                        android:layout_height="130dp"-->
+<!--                        android:background="#000000">-->
+
+<!--                        <ImageView-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="match_parent"-->
+<!--                            android:src="@drawable/images" />-->
+<!--                    </LinearLayout>-->
+
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="90dp"-->
+<!--                        android:layout_height="130dp"-->
+<!--                        android:background="#000000">-->
+
+<!--                        <ImageView-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="match_parent"-->
+<!--                            android:src="@drawable/images" />-->
+<!--                    </LinearLayout>-->
+
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="90dp"-->
+<!--                        android:layout_height="130dp"-->
+<!--                        android:background="#000000">-->
+
+<!--                        <ImageView-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="match_parent"-->
+<!--                            android:src="@drawable/images" />-->
+<!--                    </LinearLayout>-->
+
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="90dp"-->
+<!--                        android:layout_height="130dp"-->
+<!--                        android:background="#000000">-->
+
+<!--                        <ImageView-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="match_parent"-->
+<!--                            android:src="@drawable/images" />-->
+<!--                    </LinearLayout>-->
+<!--                </LinearLayout>-->
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+<!--            <androidx.appcompat.widget.AppCompatButton-->
+<!--                android:textColor="#ffffff"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:layout_marginBottom="40dp"-->
+<!--                android:fontFamily="@font/zoika"-->
+<!--                android:textSize="30sp"-->
+<!--                android:background="#1B64E6"-->
+<!--                android:text="Exportar Casos"-->
+<!--                android:id="@+id/export"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"/>-->
+
+
+
+
+
+        </LinearLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ScrollView
+                android:visibility="gone"
+                android:id="@+id/ticket_cierre_final"
+                android:orientation="vertical"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:background="#D5D5D5"
+                android:maxWidth="600dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:background="#000000"
+                        android:paddingVertical="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="70dp"
+                            android:src="@drawable/nativawhite_e1563204696938"
+                            tools:ignore="MissingConstraints"></ImageView>
+                        <ImageView
+                            android:id="@+id/close_ticket_cierre_final"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/close"
+                            app:layout_constraintRight_toRightOf="parent"
+                            android:layout_marginRight="15dp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="40dp"
+                            android:background="#C54E53"
+                            android:text="Numero de afiliado"
+                            android:textSize="12sp"
+                            android:textColor="#fff"
+                            android:fontFamily="@font/candal"
+                            android:layout_marginBottom="4dp"
+                            />
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="40dp"
+                            android:textSize="12sp"
+                            android:background="#C54E53"
+                            android:text="Numero de afiliado"
+                            android:id="@+id/numero_afiliado"
+                            android:textColor="#fff"
+                            android:fontFamily="@font/candal"
+                            android:layout_marginBottom="4dp"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="40dp"
+                            android:background="#C54E53"
+                            android:textSize="12sp"
+                            android:text="Numero de Ticket"
+                            android:textColor="#fff"
+                            android:fontFamily="@font/candal"
+                            android:layout_marginBottom="4dp"
+                            />
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="40dp"
+                            android:background="#C54E53"
+                            android:textSize="12sp"
+                            android:text="Numero de Ticket"
+                            android:id="@+id/result_ticket_number"
+                            android:textColor="#fff"
+                            android:fontFamily="@font/candal"
+                            android:layout_marginBottom="4dp"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="40dp"
+                            android:background="#C54E53"
+                            android:textSize="12sp"
+                            android:text="Fecha"
+                            android:textColor="#fff"
+                            android:fontFamily="@font/candal"
+                            android:layout_marginBottom="4dp"
+                            />
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="40dp"
+                            android:background="#C54E53"
+                            android:text="Fecha"
+                            android:id="@+id/result_ticket_date"
+                            android:textSize="12sp"
+                            android:textColor="#fff"
+                            android:fontFamily="@font/candal"
+                            android:layout_marginBottom="4dp"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="40dp"
+                            android:background="#C54E53"
+                            android:textSize="12sp"
+                            android:text="Whatsapp"
+                            android:textColor="#fff"
+                            android:layout_marginBottom="4dp"
+                            android:fontFamily="@font/candal"
+                            />
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="40dp"
+                            android:background="#C54E53"
+                            android:textSize="12sp"
+                            android:text="0414-278-44-73"
+                            android:textColor="#fff"
+                            android:layout_marginBottom="4dp"
+                            android:fontFamily="@font/candal"
+                            />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="60dp"
+                            android:background="#C54E53"
+                            android:textSize="12sp"
+                            android:text="Correo Electronico"
+                            android:textColor="#fff"
+                            android:layout_marginBottom="4dp"
+                            android:fontFamily="@font/candal"
+                            />
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:background="#C54E53"
+                            android:textSize="12sp"
+                            android:text="atencionalcliente@nativopagos.com"
+                            android:textColor="#fff"
+                            android:layout_marginBottom="4dp"
+                            android:fontFamily="@font/candal"
+                            />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="60dp"
+                            android:background="#C54E53"
+                            android:text="Telefono"
+                            android:textSize="12sp"
+                            android:textColor="#fff"
+                            android:layout_marginBottom="4dp"
+                            android:fontFamily="@font/candal"
+                            />
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:textSize="12sp"
+                            android:background="#C54E53"
+                            android:text="0500-2262624 (o)   0212 501 11 11"
+                            android:textColor="#fff"
+                            android:layout_marginBottom="4dp"
+                            android:fontFamily="@font/candal"
+                            />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="60dp"
+                            android:background="#C54E53"
+                            android:text="Seccion Contactanos"
+                            android:textColor="#fff"
+                            android:layout_marginBottom="4dp"
+                            android:fontFamily="@font/candal"
+                            android:textSize="12sp"
+                            />
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:background="#C54E53"
+                            android:text="www.nativapagos.com"
+                            android:textColor="#fff"
+                            android:layout_marginBottom="4dp"
+                            android:fontFamily="@font/candal"
+                            android:textSize="12sp"
+                            />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="60dp"
+                            android:background="#C54E53"
+                            android:text="Ejecutivo Comercial"
+                            android:textColor="#fff"
+                            android:layout_marginBottom="4dp"
+                            android:textSize="12sp"
+                            android:fontFamily="@font/candal"
+                            />
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:background="#C54E53"
+                            android:text="Jose Perez"
+                            android:textColor="#fff"
+                            android:layout_marginBottom="4dp"
+                            android:textSize="12sp"
+                            android:fontFamily="@font/candal"
+                            />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:background="#C54E53FF"
+                            android:text="Finalizar"
+                            android:id="@+id/end_ticket"
+                            android:textColor="#fff"
+                            android:fontFamily="@font/candal"
+                            />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/candal"
+                            android:padding="10dp"
+                            android:text="Fecha de inicio"
+                            android:textAlignment="center"
+                            android:textColor="#000000"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans"
+                            android:padding="10dp"
+                            android:text="Título"
+                            android:textAlignment="textStart"
+                            android:textColor="#000000"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <!--                    <LinearLayout-->
+                    <!--                        android:orientation="horizontal"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content">-->
+
+                    <!--                        <TextView-->
+                    <!--                            android:layout_width="wrap_content"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:fontFamily="@font/candal"-->
+                    <!--                            android:padding="10dp"-->
+                    <!--                            android:text="Denominación comercial"-->
+                    <!--                            android:textAlignment="center"-->
+                    <!--                            android:textColor="#000000"-->
+                    <!--                            android:textSize="14sp" />-->
+
+                    <!--                        <TextView-->
+                    <!--                            android:layout_width="0dp"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:layout_weight="1"-->
+                    <!--                            android:fontFamily="@font/opensans"-->
+                    <!--                            android:padding="10dp"-->
+                    <!--                            android:text="Título"-->
+                    <!--                            android:textAlignment="textStart"-->
+                    <!--                            android:textColor="#000000"-->
+                    <!--                            android:textSize="12sp" />-->
+                    <!--                    </LinearLayout>-->
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <!--                    <LinearLayout-->
+                    <!--                        android:orientation="horizontal"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content">-->
+
+                    <!--                        <TextView-->
+                    <!--                            android:layout_width="wrap_content"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:fontFamily="@font/candal"-->
+                    <!--                            android:padding="10dp"-->
+                    <!--                            android:text="Equipo(s) a instalar"-->
+                    <!--                            android:textAlignment="center"-->
+                    <!--                            android:textColor="#000000"-->
+                    <!--                            android:textSize="14sp" />-->
+
+                    <!--                        <TextView-->
+                    <!--                            android:layout_width="0dp"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:layout_weight="1"-->
+                    <!--                            android:fontFamily="@font/opensans"-->
+                    <!--                            android:text="Título"-->
+                    <!--                            android:textAlignment="textStart"-->
+                    <!--                            android:textColor="#000000"-->
+                    <!--                            android:textSize="12sp" />-->
+                    <!--                    </LinearLayout>-->
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+
+
+                </LinearLayout>
+            </ScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ScrollView
+                android:visibility="gone"
+                android:id="@+id/ticket_cierre"
+                android:layout_marginHorizontal="16dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:background="#D5D5D5"
+                android:maxWidth="600dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            android:background="#2A2A2A"
+                            android:textColor="#ffffff"
+                            android:gravity="center"
+                            android:fontFamily="@font/zoika"
+                            android:textSize="26sp"
+                            android:textAlignment="center"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:text="Cierre de Gestion"
+                            />
+                        <ImageView
+                            android:id="@+id/close_ticket_cierre2"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/close"
+                            app:layout_constraintRight_toRightOf="parent"
+                            android:layout_marginRight="15dp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:background="#C54E53FF"
+                            android:text="Visita Tecnica"
+                            android:id="@+id/vt"
+                            android:textColor="#fff"
+                            android:fontFamily="@font/candal"
+                            android:layout_marginBottom="4dp"
+                            android:layout_marginTop="10dp"
+                        />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/retiro"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginBottom="4dp"
+                            android:background="#C54E53FF"
+                            android:fontFamily="@font/candal"
+                            android:text="Retiro POS"
+                            android:textColor="#fff" />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:background="#C54E53FF"
+                            android:text="Instalacion POS"
+                            android:layout_marginBottom="4dp"
+                            android:id="@+id/ip"
+                            android:textColor="#fff"
+                            android:fontFamily="@font/candal"
+                            />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:background="#C54E53FF"
+                            android:text="Sustitucion de POS"
+                            android:id="@+id/sp"
+                            android:textColor="#fff"
+                            android:layout_marginBottom="4dp"
+                            android:fontFamily="@font/candal"
+                            />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:background="#C54E53FF"
+                            android:text="Reprogramacion de POS"
+                            android:layout_marginBottom="4dp"
+                            android:textColor="#fff"
+                            android:fontFamily="@font/candal"
+                            />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:background="#C54E53FF"
+                            android:id="@+id/rp"
+                            android:text="Reinstalacion de POS"
+                            android:textColor="#fff"
+                            android:layout_marginBottom="4dp"
+                            android:fontFamily="@font/candal"
+                            />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:background="#C54E53FF"
+                            android:text="Preventivo"
+                            android:id="@+id/prv1"
+                            android:textColor="#fff"
+                            android:fontFamily="@font/candal"
+                            />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/candal"
+                            android:padding="10dp"
+                            android:text="Fecha de inicio"
+                            android:textAlignment="center"
+                            android:textColor="#000000"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans"
+                            android:padding="10dp"
+                            android:text="Título"
+                            android:textAlignment="textStart"
+                            android:textColor="#000000"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+<!--                    <LinearLayout-->
+<!--                        android:orientation="horizontal"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content">-->
+
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:fontFamily="@font/candal"-->
+<!--                            android:padding="10dp"-->
+<!--                            android:text="Denominación comercial"-->
+<!--                            android:textAlignment="center"-->
+<!--                            android:textColor="#000000"-->
+<!--                            android:textSize="14sp" />-->
+
+<!--                        <TextView-->
+<!--                            android:layout_width="0dp"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_weight="1"-->
+<!--                            android:fontFamily="@font/opensans"-->
+<!--                            android:padding="10dp"-->
+<!--                            android:text="Título"-->
+<!--                            android:textAlignment="textStart"-->
+<!--                            android:textColor="#000000"-->
+<!--                            android:textSize="12sp" />-->
+<!--                    </LinearLayout>-->
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+<!--                    <LinearLayout-->
+<!--                        android:orientation="horizontal"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content">-->
+
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:fontFamily="@font/candal"-->
+<!--                            android:padding="10dp"-->
+<!--                            android:text="Equipo(s) a instalar"-->
+<!--                            android:textAlignment="center"-->
+<!--                            android:textColor="#000000"-->
+<!--                            android:textSize="14sp" />-->
+
+<!--                        <TextView-->
+<!--                            android:layout_width="0dp"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_weight="1"-->
+<!--                            android:fontFamily="@font/opensans"-->
+<!--                            android:text="Título"-->
+<!--                            android:textAlignment="textStart"-->
+<!--                            android:textColor="#000000"-->
+<!--                            android:textSize="12sp" />-->
+<!--                    </LinearLayout>-->
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+
+
+                </LinearLayout>
+            </ScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ScrollView
+                android:visibility="gone"
+                android:id="@+id/ticket_modal"
+                android:layout_marginHorizontal="16dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:background="#D5D5D5"
+                android:maxWidth="600dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            android:background="#2A2A2A"
+                            android:textColor="#ffffff"
+                            android:gravity="center"
+                            android:fontFamily="@font/zoika"
+                            android:textSize="26sp"
+                            android:textAlignment="center"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:text="Detalles del Caso"
+                            />
+                        <ImageView
+                            android:id="@+id/close_details_modal"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/close"
+                            app:layout_constraintRight_toRightOf="parent"
+                            android:layout_marginRight="15dp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/candal"
+                            android:padding="10dp"
+                            android:text="Status"
+                            android:textAlignment="center"
+                            android:textColor="#000000"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/ticket_status"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans"
+                            android:padding="10dp"
+                            android:text="Título"
+                            android:textAlignment="textStart"
+                            android:textColor="#000000"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/candal"
+                            android:padding="10dp"
+                            android:text="Título"
+                            android:textAlignment="center"
+                            android:textColor="#000000"
+                            android:textSize="14sp" />
+                        <TextView
+                            android:id="@+id/tcid"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                        </TextView>
+                        <TextView
+                            android:id="@+id/ticket_title"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans"
+                            android:padding="10dp"
+                            android:text="Título"
+                            android:textAlignment="textStart"
+                            android:textColor="#000000"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/candal"
+                            android:padding="10dp"
+                            android:text="Proyecto"
+                            android:textAlignment="center"
+                            android:textColor="#000000"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/ticket_proyect"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans"
+                            android:padding="10dp"
+                            android:text="Título"
+                            android:textAlignment="textStart"
+                            android:textColor="#000000"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/candal"
+                            android:padding="10dp"
+                            android:text="Asignada a"
+                            android:textAlignment="center"
+                            android:textColor="#000000"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/ticket_assigned"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans"
+                            android:padding="10dp"
+                            android:text="Título"
+                            android:textAlignment="textStart"
+                            android:textColor="#000000"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/candal"
+                            android:padding="10dp"
+                            android:text="Documento origen"
+                            android:textAlignment="center"
+                            android:textColor="#000000"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/ticket_document_origen"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans"
+                            android:padding="10dp"
+                            android:text="Título"
+                            android:textAlignment="viewStart"
+                            android:textColor="#000000"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/candal"
+                            android:padding="10dp"
+                            android:text="Fecha Inicial"
+                            android:textAlignment="center"
+                            android:textColor="#000000"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/ticketInicial"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans"
+                            android:padding="10dp"
+                            android:text="Ticket"
+                            android:textAlignment="viewStart"
+                            android:textColor="#000000"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/candal"
+                            android:padding="10dp"
+                            android:text="Fecha de inicio"
+                            android:textAlignment="center"
+                            android:textColor="#000000"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/ticket_start"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans"
+                            android:padding="10dp"
+                            android:text="Título"
+                            android:textAlignment="textStart"
+                            android:textColor="#000000"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/candal"
+                            android:padding="10dp"
+                            android:text="Fecha final"
+                            android:textAlignment="center"
+                            android:textColor="#000000"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/ticket_final"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans"
+                            android:padding="10dp"
+                            android:text="Título"
+                            android:textAlignment="textStart"
+                            android:textColor="#000000"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/candal"
+                            android:padding="10dp"
+                            android:text="Tipo de tarea"
+                            android:textAlignment="center"
+                            android:textColor="#000000"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/ticket_type"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans"
+                            android:padding="10dp"
+                            android:text="Título"
+                            android:textAlignment="textStart"
+                            android:textColor="#000000"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/candal"
+                            android:padding="10dp"
+                            android:text="Etapa"
+                            android:textAlignment="center"
+                            android:textColor="#000000"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/ticket_etapa"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans"
+                            android:padding="10dp"
+                            android:text="Título"
+                            android:textAlignment="textStart"
+                            android:textColor="#000000"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/candal"
+                            android:padding="10dp"
+                            android:text="Fallas"
+                            android:textAlignment="center"
+                            android:textColor="#000000"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/ticket_failures"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans"
+                            android:padding="10dp"
+                            android:text="Título"
+                            android:textAlignment="textStart"
+                            android:textColor="#000000"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/candal"
+                            android:padding="10dp"
+                            android:text="Zona de Atención"
+                            android:textAlignment="center"
+                            android:textColor="#000000"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/ticket_attention"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans"
+                            android:padding="10dp"
+                            android:text="Título"
+                            android:textAlignment="textStart"
+                            android:textColor="#000000"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                    <!--                    <LinearLayout-->
+                    <!--                        android:orientation="horizontal"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content">-->
+
+                    <!--                        <TextView-->
+                    <!--                            android:layout_width="wrap_content"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:fontFamily="@font/candal"-->
+                    <!--                            android:padding="10dp"-->
+                    <!--                            android:text="Denominación comercial"-->
+                    <!--                            android:textAlignment="center"-->
+                    <!--                            android:textColor="#000000"-->
+                    <!--                            android:textSize="14sp" />-->
+
+                    <!--                        <TextView-->
+                    <!--                            android:layout_width="0dp"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:layout_weight="1"-->
+                    <!--                            android:fontFamily="@font/opensans"-->
+                    <!--                            android:padding="10dp"-->
+                    <!--                            android:text="Título"-->
+                    <!--                            android:textAlignment="textStart"-->
+                    <!--                            android:textColor="#000000"-->
+                    <!--                            android:textSize="12sp" />-->
+                    <!--                    </LinearLayout>-->
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/candal"
+                            android:padding="10dp"
+                            android:text="Numero de afiliación"
+                            android:textAlignment="center"
+                            android:textColor="#000000"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/afiliacion"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans"
+                            android:padding="10dp"
+                            android:text="Título"
+                            android:textAlignment="textStart"
+                            android:textColor="#000000"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/candal"
+                            android:padding="10dp"
+                            android:text="Telefono"
+                            android:textAlignment="center"
+                            android:textColor="#000000"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/ticket_telefono2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans"
+                            android:padding="10dp"
+                            android:text="Título"
+                            android:textAlignment="textStart"
+                            android:textColor="#000000"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/candal"
+                            android:padding="10dp"
+                            android:text="Equipo"
+                            android:textAlignment="center"
+                            android:textColor="#000000"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/equipo"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans"
+                            android:padding="10dp"
+                            android:text="Título"
+                            android:textAlignment="textStart"
+                            android:textColor="#000000"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/candal"
+                            android:padding="10dp"
+                            android:text="Equipo asignado"
+                            android:textAlignment="center"
+                            android:textColor="#000000"
+                            android:textSize="14sp" />
+                        <TextView
+                            android:id="@+id/equipoassign"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans"
+                            android:text="Título"
+                            android:textAlignment="textStart"
+                            android:textColor="#000000"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                    <!--                    <LinearLayout-->
+                    <!--                        android:orientation="horizontal"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content">-->
+
+                    <!--                        <TextView-->
+                    <!--                            android:layout_width="wrap_content"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:fontFamily="@font/candal"-->
+                    <!--                            android:padding="10dp"-->
+                    <!--                            android:text="Equipo(s) a instalar"-->
+                    <!--                            android:textAlignment="center"-->
+                    <!--                            android:textColor="#000000"-->
+                    <!--                            android:textSize="14sp" />-->
+
+                    <!--                        <TextView-->
+                    <!--                            android:layout_width="0dp"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:layout_weight="1"-->
+                    <!--                            android:fontFamily="@font/opensans"-->
+                    <!--                            android:text="Título"-->
+                    <!--                            android:textAlignment="textStart"-->
+                    <!--                            android:textColor="#000000"-->
+                    <!--                            android:textSize="12sp" />-->
+                    <!--                    </LinearLayout>-->
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/candal"
+                            android:padding="10dp"
+                            android:text="RIF"
+                            android:textAlignment="center"
+                            android:textColor="#000000"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans"
+                            android:text="Título"
+                            android:id="@+id/ticket_rif2"
+                            android:textAlignment="textStart"
+                            android:textColor="#000000"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/candal"
+                            android:padding="10dp"
+                            android:text="Dirección"
+                            android:textAlignment="center"
+                            android:textColor="#000000"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/ticket_address"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans"
+                            android:text="Título"
+                            android:textAlignment="textStart"
+                            android:textColor="#000000"
+                            android:textSize="12sp" />
+
+
+                    </LinearLayout>
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:id="@+id/print_button"
+                        android:text="Imprimir Ticket"
+                        />
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:id="@+id/procced"
+                        android:text="Procesar"
+                        />
+
+
+                </LinearLayout>
+            </ScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/resultado_gestion"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ScrollView
+                android:visibility="gone"
+                android:id="@+id/ticket_cierre3"
+                android:layout_marginHorizontal="16dp"
+                android:orientation="vertical"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:background="#D5D5D5"
+                android:maxWidth="600dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            android:background="#2A2A2A"
+                            android:textColor="#ffffff"
+                            android:gravity="center"
+                            android:fontFamily="@font/zoika"
+                            android:textSize="26sp"
+                            android:textAlignment="center"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:text="Resultado Gestion"
+                            />
+                        <ImageView
+                            android:id="@+id/close_ticket_cierre3"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/close"
+                            app:layout_constraintRight_toRightOf="parent"
+                            android:layout_marginRight="15dp"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <LinearLayout
+                        android:background="#C522E452"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                        <CheckBox
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"/>
+                        <TextView
+                            android:textColor="#fff"
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:fontFamily="@font/candal"
+                            android:textSize="22sp"
+                            android:text="Exitoso"
+                            />
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+
+                            />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:background="#C54E53"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                        <CheckBox
+                            android:textColor="#fff"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"/>
+                        <TextView
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:fontFamily="@font/candal"
+                            android:textSize="22sp"
+                            android:text="Fallido"
+                            android:textColor="#fff"
+                            />
+
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:background="#C54E53FF"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                        <CheckBox
+                            android:textColor="#fff"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"/>
+                        <TextView
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:fontFamily="@font/candal"
+                            android:textSize="22sp"
+                            android:text="Operativo"
+                            android:textColor="#fff"
+                            />
+
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:background="#C5160101"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                        <CheckBox
+                            android:textColor="#fff"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"/>
+                        <TextView
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:fontFamily="@font/candal"
+                            android:textSize="22sp"
+                            android:text="Dañado"
+                            android:textColor="#fff"
+                            />
+
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:background="#C5BABC1B"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                        <CheckBox
+                            android:textColor="#fff"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"/>
+                        <TextView
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:fontFamily="@font/candal"
+                            android:textSize="22sp"
+                            android:text="Rollout"
+                            android:textColor="#fff"
+                            />
+
+
+                    </LinearLayout>
+                    <TextView
+                        android:paddingVertical="10dp"
+                        android:background="@color/cardview_light_background"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/candal"
+
+                        android:textSize="18sp"
+                        android:textAlignment="center"
+                        android:text="Observaciones / Adjuntar Evidecia"
+                        />
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:background="#fff"
+                        android:layout_height="160dp">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:hint="Inserta las observaciones del caso"
+                            android:textAlignment="center"
+                            android:fontFamily="@font/candal"
+                            android:id="@+id/observations"
+                            />
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:textAllCaps="false"
+                        android:textSize="23sp"
+                        android:textColor="#fff"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:id="@+id/sen_dticket"
+                        android:text="Procesar"
+                        android:backgroundTint="#C54E53FF"
+                        />
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/candal"
+                            android:padding="10dp"
+                            android:text="Fecha de inicio"
+                            android:textAlignment="center"
+                            android:textColor="#000000"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/opensans"
+                            android:padding="10dp"
+                            android:text="Título"
+                            android:textAlignment="textStart"
+                            android:textColor="#000000"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <!--                    <LinearLayout-->
+                    <!--                        android:orientation="horizontal"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content">-->
+
+                    <!--                        <TextView-->
+                    <!--                            android:layout_width="wrap_content"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:fontFamily="@font/candal"-->
+                    <!--                            android:padding="10dp"-->
+                    <!--                            android:text="Denominación comercial"-->
+                    <!--                            android:textAlignment="center"-->
+                    <!--                            android:textColor="#000000"-->
+                    <!--                            android:textSize="14sp" />-->
+
+                    <!--                        <TextView-->
+                    <!--                            android:layout_width="0dp"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:layout_weight="1"-->
+                    <!--                            android:fontFamily="@font/opensans"-->
+                    <!--                            android:padding="10dp"-->
+                    <!--                            android:text="Título"-->
+                    <!--                            android:textAlignment="textStart"-->
+                    <!--                            android:textColor="#000000"-->
+                    <!--                            android:textSize="12sp" />-->
+                    <!--                    </LinearLayout>-->
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <!--                    <LinearLayout-->
+                    <!--                        android:orientation="horizontal"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content">-->
+
+                    <!--                        <TextView-->
+                    <!--                            android:layout_width="wrap_content"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:fontFamily="@font/candal"-->
+                    <!--                            android:padding="10dp"-->
+                    <!--                            android:text="Equipo(s) a instalar"-->
+                    <!--                            android:textAlignment="center"-->
+                    <!--                            android:textColor="#000000"-->
+                    <!--                            android:textSize="14sp" />-->
+
+                    <!--                        <TextView-->
+                    <!--                            android:layout_width="0dp"-->
+                    <!--                            android:layout_height="wrap_content"-->
+                    <!--                            android:layout_weight="1"-->
+                    <!--                            android:fontFamily="@font/opensans"-->
+                    <!--                            android:text="Título"-->
+                    <!--                            android:textAlignment="textStart"-->
+                    <!--                            android:textColor="#000000"-->
+                    <!--                            android:textSize="12sp" />-->
+                    <!--                    </LinearLayout>-->
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+
+
+                </LinearLayout>
+            </ScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+<!--version blanca -->
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:orientation="vertical">-->
+<!--        <LinearLayout-->
+<!--            android:paddingHorizontal="20dp"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content">-->
+<!--            <ImageView-->
+<!--                android:layout_marginVertical="20dp"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="80dp"-->
+<!--                android:src="@drawable/netwalk_logo"-->
+<!--                />-->
+<!--        </LinearLayout>-->
+
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="#C8000000"-->
+<!--            >-->
+<!--            <ImageView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="80dp"-->
+<!--                app:srcCompat="@drawable/novaservices_logo_main" />-->
+<!--        </LinearLayout>-->
+
+<!--        <LinearLayout-->
+<!--            android:orientation="vertical"-->
+<!--            android:paddingHorizontal="20dp"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content">-->
+<!--            <com.google.android.material.textfield.TextInputLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginBottom="20dp"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                >-->
+
+<!--                <com.google.android.material.textfield.TextInputEditText-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textColor="#D51818"-->
+<!--                    android:textColorHint="#D51818"-->
+<!--                    android:hint="Titulo" />-->
+<!--            </com.google.android.material.textfield.TextInputLayout>-->
+
+<!--            <com.google.android.material.textfield.TextInputLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginBottom="20dp">-->
+
+<!--                <com.google.android.material.textfield.TextInputEditText-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textColor="#D51818"-->
+<!--                    android:textColorHint="#D51818"-->
+<!--                    android:hint="Cliente" />-->
+<!--            </com.google.android.material.textfield.TextInputLayout>-->
+
+<!--            <com.google.android.material.textfield.TextInputLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginBottom="20dp">-->
+
+<!--                <com.google.android.material.textfield.TextInputEditText-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textColor="#D51818"-->
+<!--                    android:textColorHint="#D51818"-->
+<!--                    android:hint="Tipo de tarea" />-->
+<!--            </com.google.android.material.textfield.TextInputLayout>-->
+
+<!--            <com.google.android.material.textfield.TextInputLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginBottom="20dp">-->
+
+<!--                <com.google.android.material.textfield.TextInputEditText-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textColor="#D51818"-->
+<!--                    android:textColorHint="#D51818"-->
+<!--                    android:hint="Correo electronico del cliente" />-->
+<!--            </com.google.android.material.textfield.TextInputLayout>-->
+
+<!--            <com.google.android.material.textfield.TextInputLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginBottom="20dp">-->
+
+<!--                <com.google.android.material.textfield.TextInputEditText-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textColor="#D51818"-->
+<!--                    android:textColorHint="#D51818"-->
+<!--                    android:hint="Fecha" />-->
+<!--            </com.google.android.material.textfield.TextInputLayout>-->
+
+<!--            <com.google.android.material.textfield.TextInputLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginBottom="20dp">-->
+
+<!--                <com.google.android.material.textfield.TextInputEditText-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textColor="#D51818"-->
+<!--                    android:textColorHint="#D51818"-->
+<!--                    android:hint="Horas reales" />-->
+<!--            </com.google.android.material.textfield.TextInputLayout>-->
+
+<!--            <com.google.android.material.textfield.TextInputLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginBottom="20dp">-->
+
+<!--                <com.google.android.material.textfield.TextInputEditText-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textColor="#D51818"-->
+<!--                    android:textColorHint="#D51818"-->
+<!--                    android:hint="Asignada a" />-->
+<!--            </com.google.android.material.textfield.TextInputLayout>-->
+
+<!--            <com.google.android.material.textfield.TextInputLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginBottom="20dp">-->
+
+<!--                <com.google.android.material.textfield.TextInputEditText-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textColor="#D51818"-->
+<!--                    android:textColorHint="#D51818"-->
+<!--                    android:hint="Documento origen" />-->
+<!--            </com.google.android.material.textfield.TextInputLayout>-->
+
+<!--            <com.google.android.material.textfield.TextInputLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginBottom="20dp">-->
+
+<!--                <com.google.android.material.textfield.TextInputEditText-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textColor="#D51818"-->
+<!--                    android:textColorHint="#D51818"-->
+<!--                    android:hint="Numero de afiliacion" />-->
+<!--            </com.google.android.material.textfield.TextInputLayout>-->
+
+<!--            <com.google.android.material.textfield.TextInputLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginBottom="20dp">-->
+
+<!--                <com.google.android.material.textfield.TextInputEditText-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textColor="#D51818"-->
+<!--                    android:textColorHint="#D51818"-->
+<!--                    android:hint="RIF" />-->
+<!--            </com.google.android.material.textfield.TextInputLayout>-->
+<!--            <Button-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Registrar Incidencia"-->
+<!--                android:paddingVertical="20dp"-->
+<!--                android:backgroundTint="?attr/colorOnPrimaryContainer"-->
+<!--                />-->
+<!--        </LinearLayout>-->
+
+<!--    </LinearLayout>-->
+
+</ScrollView>

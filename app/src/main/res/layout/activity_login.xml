@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg1"
+    android:gravity="center"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:context=".ui.auth.LoginActivity">
+
+    <LinearLayout
+        android:id="@+id/notLoading"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    >
+
+                    <ImageView
+                        android:layout_width="350dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/novawalk"
+                        />
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/zoika"
+                    android:text="Inicio de sesion"
+                    android:textAlignment="center"
+                    android:textColor="#ffffff"
+                    android:layout_marginBottom="10dp"
+                    android:textSize="30sp" />
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:textColorHint="#ffffff"
+                app:placeholderTextColor="#ffffff"
+                app:cursorColor="#ffffff"
+                app:hintTextColor="#000000"
+                app:boxBackgroundColor="#262630">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/username"
+                    android:textColor="#ffffff"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColorHint="#ffffff"
+                    android:shadowColor="#ffffff"
+
+                    android:hint="Nombre de Usuario"
+                    android:singleLine="true">
+
+                </com.google.android.material.textfield.TextInputEditText>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorHint="#ffffff"
+                app:hintTextColor="#000000"
+                android:layout_marginHorizontal="20dp"
+                app:boxBackgroundColor="#262630">
+<!--04165435457-->
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/password"
+                    android:textColor="#ffffff"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColorHint="#ffffff"
+                    android:hint="Clave"
+                    android:inputType="textPassword">
+
+                </com.google.android.material.textfield.TextInputEditText>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/loginLink"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="#E92D3B"
+                android:textColor="#ffffff"
+                android:layout_marginHorizontal="20dp"
+                android:textAllCaps="false"
+                android:paddingVertical="25dp"
+                android:text="Iniciar Sesion" />
+
+            <!--        <TextView-->
+            <!--            android:id="@+id/registerLink"-->
+            <!--            android:layout_width="wrap_content"-->
+            <!--            android:layout_height="wrap_content"-->
+            <!--            android:layout_marginTop="5dp"-->
+            <!--            android:text="Aun No Tienes Cuenta? Registrate"-->
+            <!--            android:textColor="@color/white"-->
+            <!--            android:textFontWeight="900"-->
+            <!--            android:textSize="16sp" />-->
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

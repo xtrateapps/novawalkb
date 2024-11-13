@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:background="#C74F54"
+        android:orientation="vertical"
+        android:layout_marginBottom="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_marginBottom="5dp"
+            android:padding="5dp"
+            android:id="@+id/ticketNumber"
+            android:text="0"
+            android:fontFamily="@font/candal"
+            android:textAlignment="center"
+            android:textSize="19sp"
+            android:textColor="#ffffff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></TextView>
+        <TextView
+            android:background="#C74F54"
+            android:padding="5dp"
+            android:id="@+id/title"
+            android:text="test"
+            android:fontFamily="@font/candal"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            android:textColor="#ffffff"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></TextView>
+    </LinearLayout>
+
+</LinearLayout>
