@@ -10,6 +10,7 @@ import android.os.Handler
 import android.os.RemoteException
 import android.util.Log
 import android.view.View
+import android.widget.CheckBox
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
@@ -75,6 +76,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var  context: Context
     private lateinit var resultTicketNumber: String
     private lateinit var resultTicketSubscripted: String
+    private lateinit var resultTicketStatusFinal: String
     @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -139,7 +141,7 @@ class MainActivity : AppCompatActivity() {
                 val response = try {
                     val ticketResult = FinishedTicket(
                         binding.tcid.text.toString().toInt(),
-                        "Nueva",
+                        resultTicketStatusFinal,
                         "${binding.observations.text}",
                         "N/A"
 
@@ -184,6 +186,8 @@ class MainActivity : AppCompatActivity() {
                                         onItemSelected(it)
                                     }
                                 }
+                                binding.ticketCierre.visibility = View.GONE
+                                binding.ticketCierreFinal.visibility = View.VISIBLE
                             }
                         }
                     }
@@ -208,17 +212,18 @@ class MainActivity : AppCompatActivity() {
         binding.procced.setOnClickListener {
             binding.ticketCierre.visibility = View.VISIBLE
             binding.ticketModal.visibility = View.GONE
-            val scrollViewM: ScrollView = binding.main
-            val top = binding.ticketCierre.getTop()
-            scrollViewM.scrollTo(0, top + 450);
+//            val scrollViewM: ScrollView = binding.main
+//            val top = binding.ticketCierre.getTop()
+//            scrollViewM.scrollTo(0, top + 450);
         }
+
         binding.vt.setOnClickListener {
-            binding.ticketCierreFinal.visibility = View.VISIBLE
+            binding.ticketCierre3.visibility = View.VISIBLE
             binding.ticketModal.visibility = View.GONE
         }
 //
-        binding.sp.setOnClickListener {
-            binding.ticketCierreFinal.visibility = View.VISIBLE
+        binding.spx.setOnClickListener {
+            binding.ticketCierre3.visibility = View.VISIBLE
             binding.ticketModal.visibility = View.GONE
         }
 
@@ -238,24 +243,76 @@ class MainActivity : AppCompatActivity() {
         }
 //
         binding.vt.setOnClickListener {
+            binding.ticketModal.visibility = View.GONE
+            binding.ticketCierre3.visibility = View.VISIBLE
+        }
+
+        binding.prv.setOnClickListener {
+            binding.ticketCierre.visibility = View.VISIBLE
+            binding.ticketCierre3.visibility = View.VISIBLE
+        }
+
+        binding.prv.setOnClickListener {
 //            binding.ticketCierre.visibility = View.VISIBLE
             binding.ticketModal.visibility = View.GONE
+            binding.ticketCierre3.visibility = View.VISIBLE
         }
 //
+
 //
         binding.closeTicketCierre2.setOnClickListener {
-            binding.ticketModal.visibility = View.GONE
-            binding.ticketCierre.visibility = View.GONE
-        }
-//
-        binding.closeTicketCierre2.setOnClickListener {
-            binding.ticketCierre3.visibility = View.GONE
+            binding.ticketCierreFinal.visibility = View.GONE
         }
 
 
         binding.vt.setOnClickListener {
-            binding.ticketModal.visibility = View.VISIBLE
+            binding.ticketCierre3.visibility = View.VISIBLE
             binding.ticketModal.visibility = View.GONE
+        }
+        binding.exitoso.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                resultTicketStatusFinal = "exitoso"
+                binding.fallido.isChecked = false
+                binding.operativo.isChecked = false
+                binding.danado.isChecked = false
+                binding.rollout.isChecked = false
+            }
+        }
+//        binding.fallido.setOnCheckedChangeListener { _, isChecked ->
+//            if (isChecked) {
+//                resultTicketStatusFinal = "fallido"
+//                binding.exitoso.isChecked = false
+//                binding.operativo.isChecked = false
+//                binding.danado.isChecked = false
+//                binding.rollout.isChecked = false
+//            }
+//        }
+        binding.operativo.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                resultTicketStatusFinal = "operativo"
+                binding.exitoso.isChecked = false
+                binding.fallido.isChecked = false
+                binding.danado.isChecked = false
+                binding.rollout.isChecked = false
+            }
+        }
+        binding.danado.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                resultTicketStatusFinal = "dañado"
+                binding.exitoso.isChecked = false
+                binding.fallido.isChecked = false
+                binding.operativo.isChecked = false
+                binding.rollout.isChecked = false
+            }
+        }
+        binding.rollout.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                resultTicketStatusFinal = "rollout"
+                binding.exitoso.isChecked = false
+                binding.fallido.isChecked = false
+                binding.operativo.isChecked = false
+                binding.danado.isChecked = false
+            }
         }
 
 //        binding.printButton.setOnClickListener {
@@ -503,6 +560,7 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
 
+                    @Deprecated("Deprecated in Java")
                     override fun getUIHandler(): Handler? {
                         return null
                     }

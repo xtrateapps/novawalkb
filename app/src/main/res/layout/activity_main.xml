@@ -891,7 +891,7 @@
                             android:layout_height="40dp"
                             android:background="#C54E53FF"
                             android:text="Sustitucion de POS"
-                            android:id="@+id/sp"
+                            android:id="@+id/spx"
                             android:textColor="#fff"
                             android:layout_marginBottom="4dp"
                             android:fontFamily="@font/candal"
@@ -944,7 +944,7 @@
                             android:layout_height="40dp"
                             android:background="#C54E53FF"
                             android:text="Preventivo"
-                            android:id="@+id/prv1"
+                            android:id="@+id/prv"
                             android:textColor="#fff"
                             android:fontFamily="@font/candal"
                             />
@@ -1804,6 +1804,7 @@
 
 
                         <CheckBox
+                            android:id="@+id/exitoso"
                             android:layout_width="50dp"
                             android:layout_height="50dp"/>
                         <TextView
@@ -1829,6 +1830,7 @@
 
 
                         <CheckBox
+                            android:id="@+id/fallido"
                             android:textColor="#fff"
                             android:layout_width="50dp"
                             android:layout_height="50dp"/>
@@ -1851,6 +1853,7 @@
 
 
                         <CheckBox
+                            android:id="@+id/operativo"
                             android:textColor="#fff"
                             android:layout_width="50dp"
                             android:layout_height="50dp"/>
@@ -1873,6 +1876,7 @@
 
 
                         <CheckBox
+                            android:id="@+id/danado"
                             android:textColor="#fff"
                             android:layout_width="50dp"
                             android:layout_height="50dp"/>
@@ -1895,6 +1899,7 @@
 
 
                         <CheckBox
+                            android:id="@+id/rollout"
                             android:textColor="#fff"
                             android:layout_width="50dp"
                             android:layout_height="50dp"/>
