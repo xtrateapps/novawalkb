@@ -518,7 +518,7 @@ class MainActivity : AppCompatActivity() {
                 "Etapa: ${binding.ticketEtapa.text.toString()}",
                 "Zona de Atención: ${binding.ticketAttention.text.toString()}",
                 "Fallas: ${binding.ticketFailures.text.toString()}",
-                "Fallas: ${binding.ticketType.text.toString()}",
+                "Tipo de tarea: ${binding.ticketType.text.toString()}",
 //                binding.equipoAInstalar.text.toString(),
                 "Telefono: ${binding.ticketTelefono2.text.toString()}",
                 "Numero de Afililacion: ${binding.afiliacion.text.toString()}",
