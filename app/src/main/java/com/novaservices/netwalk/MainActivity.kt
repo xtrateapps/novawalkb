@@ -1,23 +1,16 @@
 package com.novaservices.netwalk
 
-import android.R
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.graphics.Camera
-import android.icu.text.SimpleDateFormat
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.RemoteException
-import android.util.Log
 import android.view.View
-import android.widget.CheckBox
-import android.widget.ScrollView
-import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.newland.me.ConnUtils
 import com.newland.me.DeviceManager
@@ -29,21 +22,17 @@ import com.newland.mtype.module.common.printer.Alignment
 import com.newland.mtype.module.common.printer.EnFontSize
 import com.newland.mtype.module.common.printer.ErrorCode
 import com.newland.mtype.module.common.printer.FontScale
+import com.newland.mtype.module.common.printer.ImageFormat
 import com.newland.mtype.module.common.printer.PrintListener
 import com.newland.mtype.module.common.printer.Printer
 import com.newland.mtype.module.common.printer.PrinterStatus
 import com.newland.mtype.module.common.printer.TextFormat
 import com.newland.mtype.module.common.security.K21SecurityModule
-import com.newland.mtype.module.common.cardreader.CommonCardType
-import com.newland.mtype.module.common.scanner.CameraType.entries
-import com.newland.mtype.module.common.scanner.CameraType.MIPI
 import com.newland.mtypex.nseries3.NS3ConnParams
 import com.novaservices.netwalk.adapter.CaseAdapter
 import com.novaservices.netwalk.databinding.ActivityMainBinding
 import com.novaservices.netwalk.domain.CaseById
-import com.novaservices.netwalk.domain.NovaWalkUser
 import com.novaservices.netwalk.domain.Operations
-import com.novaservices.netwalk.ui.RegisterCaseActivity
 import com.novaservices.nova.utils.RetrofitInstance
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -53,17 +42,11 @@ import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.io.IOException
 import java.util.Date
-import com.newland.mtype.module.common.printer.*
 import com.newland.mtype.module.common.scanner.CameraType
-import com.novaservices.netwalk.domain.Case
 import com.novaservices.netwalk.domain.FinishedTicket
 import com.novaservices.netwalk.ui.auth.LoginActivity
-import java.time.Instant
-import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -157,6 +140,10 @@ class MainActivity : AppCompatActivity() {
                 if(response.isSuccessful && response.body() != null) {
                     withContext(Dispatchers.Main){
                         Toast.makeText( this@MainActivity, "Insertado Con Exito", Toast.LENGTH_LONG).show()
+                        printReciboFinal(resultTicketNumber, resultTicketStatusFinal,
+                            binding.observations.text.toString()
+                        )
+
                         binding.resultadoGestion.visibility = View.GONE
 //                        binding.closeTicketCierre.visibility = View.GONE
 //                        binding.ticketCierre.visibility = View.GONE
@@ -205,9 +192,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.endTicket.setOnClickListener {
+            binding.ticketCierre3.visibility = View.GONE
             binding.ticketCierre.visibility = View.GONE
             binding.ticketCierreFinal.visibility = View.GONE
-            binding.ticketCierre3.visibility = View.GONE
+            printReciboFinal2(
+                binding.resultTicketNumber.text.toString().replace("ticket_#", "Numero de ticket "),
+                "Numero de afiliado ${binding.numeroAfiliado.text.toString()}",
+                "Ejecutivo ${binding.resultTicketDate.text.toString()}",
+                binding.klxcklxc.text.toString(),
+                binding.cbvcvc.text.toString(),
+                binding.bvbvb.text.toString(), binding.zxczxc.text.toString(), binding.sdsdss.text.toString() ,"Novaservices 2024")
         }
         binding.procced.setOnClickListener {
             binding.ticketCierre.visibility = View.VISIBLE
@@ -278,15 +272,15 @@ class MainActivity : AppCompatActivity() {
                 binding.rollout.isChecked = false
             }
         }
-//        binding.fallido.setOnCheckedChangeListener { _, isChecked ->
-//            if (isChecked) {
-//                resultTicketStatusFinal = "fallido"
-//                binding.exitoso.isChecked = false
-//                binding.operativo.isChecked = false
-//                binding.danado.isChecked = false
-//                binding.rollout.isChecked = false
-//            }
-//        }
+        binding.fallido.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                resultTicketStatusFinal = "fallido"
+                binding.exitoso.isChecked = false
+                binding.operativo.isChecked = false
+                binding.danado.isChecked = false
+                binding.rollout.isChecked = false
+            }
+        }
         binding.operativo.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 resultTicketStatusFinal = "operativo"
@@ -463,7 +457,8 @@ class MainActivity : AppCompatActivity() {
         var sd = getDateTimeFromEpocLongOfSeconds2(it.fecha_final!!.toDouble().toLong())
         binding.ticketModal.visibility = View.VISIBLE
         binding.tcid.text = it.id
-        binding.ticketTitle.text = it.titulo!!.replace(" ", "_")
+        binding.tcid.visibility = View.GONE
+        binding.ticketTitlef.text = it.titulo!!.toString().replace(Regex("/\\s+/g"), "_")
         binding.ticketProyect.text = it.proyecto!!
         binding.ticketAssigned.text = it.asignada_a
         binding.ticketDocumentOrigen.text = it.documento_origen
@@ -514,23 +509,23 @@ class MainActivity : AppCompatActivity() {
         binding.printButton.setOnClickListener {
             printEncabezado()
             printRecibo(
-                binding.ticketTitle.text.toString(),
-                binding.ticketStart.text.toString(),
-                binding.ticketDocumentOrigen.text.toString(),
-                binding.ticketFinal.text.toString(),
-                binding.ticketAssigned.text.toString(),
-                binding.ticketProyect.text.toString(),
-                binding.ticketAttention.text.toString(),
-                binding.ticketEtapa.text.toString(),
-                binding.ticketFailures.text.toString(),
-                binding.ticketType.text.toString(),
-                "",
-                "",
-                "",
-                "asdasdas",
+                "Titulo: ${binding.ticketTitlef.text.toString()}",
+                "Fecha: ${binding.ticketStart.text.toString()}",
+                binding.ticketStart.text.toString().replace("ticket_#", "Numero de ticket "),
+                "Asignada: ${binding.ticketAssigned.text.toString()}",
+                "Proyecto: ${binding.ticketProyect.text.toString()}",
+                "Zona de Atencion: ${binding.ticketAttention.text.toString()}",
+                "Etapa: ${binding.ticketEtapa.text.toString()}",
+                "Zona de Atención: ${binding.ticketAttention.text.toString()}",
+                "Fallas: ${binding.ticketFailures.text.toString()}",
+                "Fallas: ${binding.ticketType.text.toString()}",
 //                binding.equipoAInstalar.text.toString(),
-                binding.ticketTelefono2.text.toString(),
-                binding.ticketStatus.text.toString(),
+                "Telefono: ${binding.ticketTelefono2.text.toString()}",
+                "Numero de Afililacion: ${binding.afiliacion.text.toString()}",
+                "Equipo: ${binding.equipo.text.toString()}",
+                "Equipo asignado: ${binding.equipoassign.text.toString()}",
+                "Rif: ${binding.ticketRif2.text.toString()}",
+                "Direccion: ${binding.ticketAddress.text.toString()}",
             )
         }
     }
@@ -626,7 +621,6 @@ private fun printEncabezado() {
         printerModule = deviceManager.device.getStandardModule(ModuleType.COMMON_PRINTER) as Printer
 //        open camera
 
-        cameraModule = deviceManager.device.getStandardModule(ModuleType.COMMON_CARDREADER) as CameraType
 
         var printScriptUtil = printerModule.getPrintScriptUtil(this@MainActivity)
 
@@ -641,7 +635,7 @@ private fun printEncabezado() {
         //pls add the font file in assets folder.
 
 
-        var linea = "BANCO BNC - RIF J-30984132-7\n" + "Novaservices\n"
+        var linea = "Novaservices\n"
         //printScriptUtil.setLineSpacing(1)
 
         //format.enFontSize = EnFontSize.FONT_10x8
@@ -650,7 +644,7 @@ private fun printEncabezado() {
         printScriptUtil.print(printListener)
     }
 
-    fun printRecibo(q:String,w:String,e:String,r:String,t:String,y:String,u:String,i:String,o:String,p:String,a:String,s:String,d:String,f:String,g:String?,h:String?) {
+    fun printRecibo(q:String,w:String,e:String,r:String,t:String,y:String,u:String,i:String,o:String,p:String,g:String?,zx:String?,sd:String?,xc:String?,cv:String?, x:String?) {
         try {
             deviceManager = ConnUtils.getDeviceManager()
             deviceConnParams = NS3ConnParams()
@@ -726,7 +720,11 @@ private fun printEncabezado() {
                     else
                         format.enFontSize = EnFontSize.FONT_8x16*/
 //                "BANCO BNC - RIF J-30984132-7" + "Novaservices\n"
-                    var linea = "`${q}\n\' ${w}\n\' ${e}\n\' ${t}\n\' ${y}\n\' ${u}\n\' ${i}\n\' ${r}\n\' ${o}\n\' ${p}\n\' ${a}\n\' ${s}\n\' ${d}\n\' ${f}\n\' ${g}\n\'`"
+
+
+
+
+                    var linea = "`${q}\n\' ${w}\n\' ${e}\n\' ${t}\n\' ${y}\n\' ${u}\n\' ${i}\n\' ${r}\n\' ${o}\n\' ${p}\n\' ${g}\n\' ${zx}\n\' ${sd}\n\' ${xc}\n\' ${cv}\n\' ${x}\n\'`"
                     printScriptUtil.addText(format, linea)
 
                     printScriptUtil.addPaperFeed(4)
@@ -738,8 +736,201 @@ private fun printEncabezado() {
             }
         }
     }
+    @SuppressLint("UseCompatLoadingForDrawables")
+    fun printReciboFinal2(
+        q: String,
+        w: String,
+        e: String,
+        r: String,
+        t: String,
+        y: String,
+        u: String,
+        i: String,
+        text: String
+    ) {
+        try {
+            deviceManager = ConnUtils.getDeviceManager()
+            deviceConnParams = NS3ConnParams()
+            deviceManager.init(
+                this@MainActivity,
+                K21_DRIVER_NAME,
+                deviceConnParams,
+                object : DeviceEventListener<ConnectionCloseEvent> {
+                    override fun onEvent(event: ConnectionCloseEvent, handler: Handler) {
+                        if (event.isSuccess) {
+
+                        }
+                        if (event.isFailed) {
+
+                        }
+                    }
+
+                    override fun getUIHandler(): Handler? {
+                        return null
+                    }
+                })
+            deviceManager.connect()
+            securityModule =
+                deviceManager.device.getStandardModule(ModuleType.COMMON_SECURITY) as K21SecurityModule
+            printerModule = deviceManager.device.getStandardModule(ModuleType.COMMON_PRINTER) as Printer
 
 
+        } catch (e: Exception) {
+
+        }
+        printerModule = deviceManager.device.getStandardModule(ModuleType.COMMON_PRINTER) as Printer
+        var printScriptUtil = printerModule.getPrintScriptUtil(this@MainActivity)
+
+        if (printerModule.getStatus() == PrinterStatus.NORMAL) {
+
+            var format = TextFormat()
+            format.alignment = Alignment.LEFT
+            format.fontScale = FontScale.ORINARY
+            format.enFontSize = EnFontSize.FONT_8x24
+            format.isLinefeed = false
+            format.fontScale = FontScale.ORINARY
+
+            var printScriptUtil = printerModule.getPrintScriptUtil(this@MainActivity)
+
+
+            printScriptUtil.setGray(8)
+            //pls add the font file in assets folder.
+            val name = "InconsolataRegular.ttf"
+            printScriptUtil.addFont(this@MainActivity, name)
+            var lineaPrn = ""
+
+            try {
+
+
+
+
+
+
+                format.enFontSize = EnFontSize.FONT_10x16
+                var imageFormat = ImageFormat()
+
+                imageFormat.alignment = Alignment.CENTER
+                imageFormat.width = 180
+                imageFormat.height = 90
+                imageFormat.offset = 0
+
+//                Xq no me salen algnuos campos
+
+//                linea = String.format(
+//                    "%.42s\n" + "%.42s\n" + "%.42s\n" + "%.42s\n" + "%.42s\n" + "%.42s\n" + "%.42s\n" + "%.42s\n" + "%.42s\n" + "%.42s\n" + "%.42s\n" + "%.42s\n" + "%.42s\n", "%.42s\n" + "%.42s\n\n",
+//
+//                )
+
+
+                /* if (listRecibo[1].contains("CIERRE"))
+                    format.enFontSize = EnFontSize.FONT_8x16
+                else
+                    format.enFontSize = EnFontSize.FONT_8x16*/
+//                "BANCO BNC - RIF J-30984132-7" + "Novaservices\n"
+                var linea = "`${q}\n\' ${w}\n\' ${e}\n\' ${r}\n\' ${t}\n\' ${y}\n\' ${u}\n\' ${text}\n\'`"
+                var ds = getResources().getDrawable(R.drawable.nativa);
+                val drawas = ds as BitmapDrawable
+                val bitmap = drawas.bitmap
+                printScriptUtil.addImage(imageFormat, bitmap)
+                printScriptUtil.addText(format, linea)
+
+                printScriptUtil.addPaperFeed(4)
+                printScriptUtil.print(printListener)
+
+
+            } catch (e: RemoteException) {
+                e.printStackTrace()
+            }
+        }
+    }
+    fun printReciboFinal(q:String,w:String,e:String) {
+        try {
+            deviceManager = ConnUtils.getDeviceManager()
+            deviceConnParams = NS3ConnParams()
+            deviceManager.init(
+                this@MainActivity,
+                K21_DRIVER_NAME,
+                deviceConnParams,
+                object : DeviceEventListener<ConnectionCloseEvent> {
+                    override fun onEvent(event: ConnectionCloseEvent, handler: Handler) {
+                        if (event.isSuccess) {
+
+                        }
+                        if (event.isFailed) {
+
+                        }
+                    }
+
+                    override fun getUIHandler(): Handler? {
+                        return null
+                    }
+                })
+            deviceManager.connect()
+            securityModule =
+                deviceManager.device.getStandardModule(ModuleType.COMMON_SECURITY) as K21SecurityModule
+            printerModule = deviceManager.device.getStandardModule(ModuleType.COMMON_PRINTER) as Printer
+
+
+        } catch (e: Exception) {
+
+        }
+        printerModule = deviceManager.device.getStandardModule(ModuleType.COMMON_PRINTER) as Printer
+        var printScriptUtil = printerModule.getPrintScriptUtil(this@MainActivity)
+
+        if (printerModule.getStatus() == PrinterStatus.NORMAL) {
+
+            var format = TextFormat()
+            format.alignment = Alignment.LEFT
+            format.fontScale = FontScale.ORINARY
+            format.enFontSize = EnFontSize.FONT_8x24
+            format.isLinefeed = false
+            format.fontScale = FontScale.ORINARY
+
+            var printScriptUtil = printerModule.getPrintScriptUtil(this@MainActivity)
+
+
+            printScriptUtil.setGray(8)
+            //pls add the font file in assets folder.
+            val name = "InconsolataRegular.ttf"
+            printScriptUtil.addFont(this@MainActivity, name)
+            var lineaPrn = ""
+
+            try {
+
+
+
+
+
+
+                format.enFontSize = EnFontSize.FONT_10x16
+
+
+
+//                Xq no me salen algnuos campos
+
+//                linea = String.format(
+//                    "%.42s\n" + "%.42s\n" + "%.42s\n" + "%.42s\n" + "%.42s\n" + "%.42s\n" + "%.42s\n" + "%.42s\n" + "%.42s\n" + "%.42s\n" + "%.42s\n" + "%.42s\n" + "%.42s\n", "%.42s\n" + "%.42s\n\n",
+//
+//                )
+
+
+                /* if (listRecibo[1].contains("CIERRE"))
+                    format.enFontSize = EnFontSize.FONT_8x16
+                else
+                    format.enFontSize = EnFontSize.FONT_8x16*/
+//                "BANCO BNC - RIF J-30984132-7" + "Novaservices\n"
+                var linea = "`${q}\n\' ${w}\n\' ${e}\n\'`"
+                printScriptUtil.addText(format, linea)
+
+                printScriptUtil.addPaperFeed(4)
+                printScriptUtil.print(printListener)
+
+
+            } catch (e: RemoteException) {
+                e.printStackTrace()
+            }
+        }
+    }
 
     private fun printReporteGeneral(valor: String) {
         deviceManager = ConnUtils.getDeviceManager()
