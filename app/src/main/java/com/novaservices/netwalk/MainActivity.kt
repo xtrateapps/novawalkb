@@ -83,7 +83,9 @@ class MainActivity : AppCompatActivity() {
 //
 //        binding.regionName.text = getIntent.getStringExtra("region_id")
 
-
+        binding.closeTicketCierre2.setOnClickListener {
+            binding.ticketCierre.visibility = View.GONE
+        }
 
         GlobalScope.launch(Dispatchers.IO) {
             val response = try {
@@ -184,6 +186,8 @@ class MainActivity : AppCompatActivity() {
         binding.closeTicketCierreFinal.setOnClickListener {
             binding.ticketCierreFinal.visibility = View.GONE
         }
+
+
 //        binding.closeTicketCierre.setOnClickListener {
 //            binding.ticketCierre.visibility = View.GONE
 //        }
@@ -198,8 +202,8 @@ class MainActivity : AppCompatActivity() {
             printReciboFinal2(
                 binding.resultTicketNumber.text.toString().replace("ticket_#", "Numero de ticket "),
                 "Numero de afiliado ${binding.numeroAfiliado.text.toString()}",
-                "Ejecutivo ${binding.resultTicketDate.text.toString()}",
-                binding.klxcklxc.text.toString(),
+                "Ejecutivo ${binding.klxcklxc.text.toString()}",
+                "Fecha de cierre ${binding.resultTicketDate.text.toString()}",
                 binding.cbvcvc.text.toString(),
                 binding.bvbvb.text.toString(), binding.zxczxc.text.toString(), binding.sdsdss.text.toString() ,"Novaservices 2024")
         }
@@ -253,10 +257,8 @@ class MainActivity : AppCompatActivity() {
         }
 //
 
-//
-        binding.closeTicketCierre2.setOnClickListener {
-            binding.ticketCierreFinal.visibility = View.GONE
-        }
+//close_ticket_cierre2
+
 
 
         binding.vt.setOnClickListener {
@@ -634,11 +636,19 @@ private fun printEncabezado() {
         printScriptUtil.setGray(10)
         //pls add the font file in assets folder.
 
-
-        var linea = "Novaservices\n"
+    var imageFormat = ImageFormat()
+    imageFormat.alignment = Alignment.CENTER
+    imageFormat.width = 180
+    imageFormat.height = 90
+    imageFormat.offset = 0
+    var ds = getResources().getDrawable(R.drawable.nativa);
+    val drawas = ds as BitmapDrawable
+    val bitmap = drawas.bitmap
+        var linea = "Detalle Del Caso\n"
         //printScriptUtil.setLineSpacing(1)
 
         //format.enFontSize = EnFontSize.FONT_10x8
+        printScriptUtil.addImage(imageFormat, bitmap)
         printScriptUtil.addText(format, linea)
         printScriptUtil.addPaperFeed(2)
         printScriptUtil.print(printListener)
@@ -827,6 +837,7 @@ private fun printEncabezado() {
                 else
                     format.enFontSize = EnFontSize.FONT_8x16*/
 //                "BANCO BNC - RIF J-30984132-7" + "Novaservices\n"
+
                 var linea = "`${q}\n\' ${w}\n\' ${e}\n\' ${r}\n\' ${t}\n\' ${y}\n\' ${u}\n\' ${text}\n\'`"
                 var ds = getResources().getDrawable(R.drawable.nativa);
                 val drawas = ds as BitmapDrawable
@@ -919,7 +930,19 @@ private fun printEncabezado() {
                 else
                     format.enFontSize = EnFontSize.FONT_8x16*/
 //                "BANCO BNC - RIF J-30984132-7" + "Novaservices\n"
-                var linea = "`${q}\n\' ${w}\n\' ${e}\n\'`"
+                var imageFormat = ImageFormat()
+
+                imageFormat.alignment = Alignment.CENTER
+                imageFormat.width = 180
+                imageFormat.height = 90
+                imageFormat.offset = 0
+                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm")
+                val current = LocalDateTime.now().format(formatter)
+                var linea = "`Cierre De Gestion\n\' \n\' ${q}\n\' ${w}\n\' ${e}\n\' ${current}\n `"
+                var ds = getResources().getDrawable(R.drawable.nativa);
+                val drawas = ds as BitmapDrawable
+                val bitmap = drawas.bitmap
+                printScriptUtil.addImage(imageFormat, bitmap)
                 printScriptUtil.addText(format, linea)
 
                 printScriptUtil.addPaperFeed(4)
