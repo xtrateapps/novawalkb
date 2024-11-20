@@ -117,7 +117,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         Toast.makeText(this@MainActivity, dt.toString(), Toast.LENGTH_LONG).show()
-//
+// s
 //        binding.regionName.text = getIntent.getStringExtra("region_id")
         binding.xcs.setOnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
