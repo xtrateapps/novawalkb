@@ -1,16 +1,22 @@
 package com.novaservices.netwalk
 
 import android.annotation.SuppressLint
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.os.RemoteException
+import android.provider.MediaStore
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.newland.me.ConnUtils
 import com.newland.me.DeviceManager
@@ -45,8 +51,14 @@ import java.util.Date
 import com.newland.mtype.module.common.scanner.CameraType
 import com.novaservices.netwalk.domain.FinishedTicket
 import com.novaservices.netwalk.ui.auth.LoginActivity
+import kotlinx.coroutines.CoroutineScope
+import java.io.File
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Base64
+import java.time.*
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -60,6 +72,29 @@ class MainActivity : AppCompatActivity() {
     private lateinit var resultTicketNumber: String
     private lateinit var resultTicketSubscripted: String
     private lateinit var resultTicketStatusFinal: String
+    private val PERMISSION_CODE = 1000
+    private val IMAGE_CAPTURE_CODE = 1001
+    private lateinit var imageBase64: Base64
+
+    var vFilename: String = ""
+
+    private val simpleDateFormat = SimpleDateFormat("dd MMMM yyyy, HH:mm:ss", Locale.ENGLISH)
+
+
+
+
+
+    private fun getDateString(time: Long) : String = simpleDateFormat.format(time * 1000L)
+
+    private fun getDateString(time: Int) : String = simpleDateFormat.format(time * 1000L)
+
+    val dt = Instant.ofEpochSecond(45603.67519675926.toLong() * 1000L)
+        .atZone(ZoneId.systemDefault())
+        .toLocalDateTime()
+
+
+
+
     @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +105,7 @@ class MainActivity : AppCompatActivity() {
         binding.usernametech.text = getIntent.getStringExtra("username")
 //        binding.regionName.text = getIntent.getStringExtra("region_id")
 
+        Toast.makeText(this@MainActivity, dt.toString(), Toast.LENGTH_LONG).show()
         when (getIntent.getStringExtra("region_id")) {
             "1" -> binding.regionName.text = "Caracas"
             "2" -> binding.regionName.text = "Centro Llanos"
@@ -80,11 +116,62 @@ class MainActivity : AppCompatActivity() {
                 binding.regionName.text = "Region Por Asignar"
             }
         }
+        Toast.makeText(this@MainActivity, dt.toString(), Toast.LENGTH_LONG).show()
 //
 //        binding.regionName.text = getIntent.getStringExtra("region_id")
+        binding.xcs.setOnClickListener {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                openCamera()
+            } else {
+                Toast.makeText(this@MainActivity, "Sorry you're version android is not support, Min Android 6.0 (Marsmallow)", Toast.LENGTH_LONG).show()
+            }
+        }
 
+//        var raw:double = 44233.8647553819;
+//        long days = (long) raw;
+//        double fraction = raw - days;
+//
+//        LocalDate epoch = LocalDate.of(1899, 12, 30);
+//        LocalDate date = epoch.plusDays(days);
+//        System.out.println(date);
+//        > 2021-02-06 - so far, so good
+
+//        binding.updateTicketChange.setOnClickListener {
+//            Toast.makeText(this@MainActivity, "Datos del ticket actualizados", Toast.LENGTH_LONG).show()
+//        }
         binding.closeTicketCierre2.setOnClickListener {
             binding.ticketCierre.visibility = View.GONE
+        }
+
+        binding.update.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                val response = try {
+                    val cases = CaseById(
+                        getIntent.getIntExtra("id", 0).toString(),
+                    )
+//                RetrofitInstance.api.getAllTickets()
+                    RetrofitInstance.api.getAllTicketsByUser(cases)
+                } catch (error: IOException) {
+                    Toast.makeText(this@MainActivity, "app error $error", Toast.LENGTH_LONG).show()
+                    return@launch
+                } catch (e: HttpException) {
+                    Toast.makeText(this@MainActivity, "http error $e", Toast.LENGTH_LONG).show()
+                    return@launch
+                }
+                if(response.isSuccessful && response.body() != null) {
+                    withContext(Dispatchers.Main){
+//                    if(response.body()!!.message.contains("No Existen")) {
+//                        binding.noRecharges.visibility = View.VISIBLE
+//                        Toast.makeText(context, "No existen Recargas", Toast.LENGTH_SHORT).show()
+//                    }
+                        val recyclerView = binding.classes
+                        recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
+                        recyclerView.adapter = CaseAdapter(response.body()!!.data!!) {
+                            onItemSelected(it)
+                        }
+                    }
+                }
+            }
         }
 
         GlobalScope.launch(Dispatchers.IO) {
@@ -120,7 +207,46 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this@MainActivity, LoginActivity::class.java)
             startActivity(intent)
         }
+        binding.vt.setOnClickListener {
+            binding.ticketCierre3.visibility = View.VISIBLE
+            binding.ticketModal.visibility = View.GONE
+        }
+//
+        binding.spx.setOnClickListener {
+            binding.ticketCierre3.visibility = View.VISIBLE
+            binding.ticketModal.visibility = View.GONE
+        }
 
+        binding.ip.setOnClickListener {
+            binding.ticketCierre3.visibility = View.VISIBLE
+            binding.ticketModal.visibility = View.GONE
+        }
+//
+        binding.retiro.setOnClickListener {
+            binding.ticketCierre3.visibility = View.VISIBLE
+            binding.ticketModal.visibility = View.GONE
+        }
+
+        binding.rp.setOnClickListener {
+            binding.ticketCierre3.visibility = View.VISIBLE
+            binding.ticketModal.visibility = View.GONE
+        }
+//
+        binding.vt.setOnClickListener {
+            binding.ticketModal.visibility = View.GONE
+            binding.ticketCierre3.visibility = View.VISIBLE
+        }
+
+        binding.prv.setOnClickListener {
+            binding.ticketCierre.visibility = View.VISIBLE
+            binding.ticketCierre3.visibility = View.VISIBLE
+        }
+
+        binding.prv.setOnClickListener {
+//            binding.ticketCierre.visibility = View.VISIBLE
+            binding.ticketModal.visibility = View.GONE
+            binding.ticketCierre3.visibility = View.VISIBLE
+        }
         binding.senDticket.setOnClickListener {
             GlobalScope.launch(Dispatchers.IO) {
                 val response = try {
@@ -192,7 +318,7 @@ class MainActivity : AppCompatActivity() {
 //            binding.ticketCierre.visibility = View.GONE
 //        }
         binding.closeDetailsModal.setOnClickListener {
-            binding.ticketModal.visibility = View.GONE  
+            binding.ticketModal.visibility = View.GONE
         }
 
         binding.endTicket.setOnClickListener {
@@ -509,6 +635,40 @@ class MainActivity : AppCompatActivity() {
 //                binding..text)
 
         binding.printButton.setOnClickListener {
+            binding.vt.setOnClickListener {
+                binding.ticketCierre3.visibility = View.VISIBLE
+                binding.ticketModal.visibility = View.GONE
+            }
+//
+            binding.spx.setOnClickListener {
+                binding.ticketCierre3.visibility = View.VISIBLE
+                binding.ticketModal.visibility = View.GONE
+            }
+
+            binding.ip.setOnClickListener {
+                binding.ticketCierre3.visibility = View.VISIBLE
+                binding.ticketModal.visibility = View.GONE
+            }
+//
+            binding.retiro.setOnClickListener {
+                binding.ticketCierre3.visibility = View.VISIBLE
+                binding.ticketModal.visibility = View.GONE
+            }
+
+            binding.rp.setOnClickListener {
+                binding.ticketCierre3.visibility = View.VISIBLE
+                binding.ticketModal.visibility = View.GONE
+            }
+//
+            binding.vt.setOnClickListener {
+                binding.ticketModal.visibility = View.GONE
+                binding.ticketCierre3.visibility = View.VISIBLE
+            }
+
+            binding.prv.setOnClickListener {
+                binding.ticketCierre.visibility = View.VISIBLE
+                binding.ticketCierre3.visibility = View.VISIBLE
+            }
             printEncabezado()
             printRecibo(
                 "Titulo: ${binding.ticketTitlef.text.toString()}",
@@ -529,6 +689,7 @@ class MainActivity : AppCompatActivity() {
                 "Rif: ${binding.ticketRif2.text.toString()}",
                 "Direccion: ${binding.ticketAddress.text.toString()}",
             )
+
         }
     }
 
@@ -586,7 +747,63 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun openCamera() {
+        val values = ContentValues()
+        values.put(MediaStore.Images.Media.TITLE, "New Picture")
+        values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera")
 
+        //camera intent
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+        // set filename
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        vFilename = "FOTO_" + timeStamp + ".jpg"
+
+        // set direcory folder
+        val file = File(Environment.getExternalStorageDirectory().getPath(), vFilename);
+        val image_uri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider", file);
+
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri)
+        startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        //called when user presses ALLOW or DENY from Permission Request Popup
+        when(requestCode){
+            PERMISSION_CODE -> {
+                if (grantResults.size > 0 && grantResults[0] ==
+                    PackageManager.PERMISSION_GRANTED){
+                    //permission from popup was granted
+                    openCamera()
+                }
+                else{
+                    //permission from popup was denied
+                    Toast.makeText(this, "Permission denied", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            Toast.makeText(this@MainActivity, "Foto anexada con exito", Toast.LENGTH_LONG).show()
+
+            //File object of camera image
+            val file = File(Environment.getExternalStorageDirectory().path, vFilename);
+            val uri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider", file);
+            Toast.makeText(this@MainActivity, uri.toString(), Toast.LENGTH_LONG).show()
+
+
+////            longToast(file.toString())
+//
+//            //Uri of camera image
+
+//            binding.mylogo.setImageURI(uri)
+        }
+    }
 
 //    private fun printEncabezado(q:String,w:String,e:String,r:String,t:String,y:String,u:String,i:String,o:String,p:String,a:String,s:String,d:String,f:String,g:String,h:String,j:String) {
 private fun printEncabezado() {
@@ -838,7 +1055,7 @@ private fun printEncabezado() {
                     format.enFontSize = EnFontSize.FONT_8x16*/
 //                "BANCO BNC - RIF J-30984132-7" + "Novaservices\n"
 
-                var linea = "`${q}\n\' ${w}\n\' ${e}\n\' ${r}\n\' ${t}\n\' ${y}\n\' ${u}\n\' ${text}\n\'`"
+                var linea = "`Informacion De Gestion\n\' Canales De Atencion\n\' ${q}\n\' ${w}\n\' ${e}\n\' ${r}\n\' ${t}\n\' ${y}\n\' ${u}\n\' ${text}\n\'`"
                 var ds = getResources().getDrawable(R.drawable.nativa);
                 val drawas = ds as BitmapDrawable
                 val bitmap = drawas.bitmap
