@@ -126,6 +126,13 @@ class LoginActivity : AppCompatActivity() {
                     }
                 } else {
                     Log.i("network responses login", LoginUserResponse.body().toString())
+                    this@LoginActivity.runOnUiThread(Runnable {
+                        Toast.makeText(
+                            this@LoginActivity,
+                            "Ocurrio un error",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    })
 //                       binding.loading.visibility = View.GONE
 //                        binding.notLoading.visibility = View.VISIBLE
 //                    val intent = Intent(this@LoginActivity, LoginActivity::class.java)

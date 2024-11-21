@@ -5,7 +5,6 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.os.Bundle
@@ -14,6 +13,7 @@ import android.os.Handler
 import android.os.RemoteException
 import android.provider.MediaStore
 import android.view.View
+import android.widget.CheckBox
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
@@ -33,31 +33,30 @@ import com.newland.mtype.module.common.printer.PrintListener
 import com.newland.mtype.module.common.printer.Printer
 import com.newland.mtype.module.common.printer.PrinterStatus
 import com.newland.mtype.module.common.printer.TextFormat
+import com.newland.mtype.module.common.scanner.CameraType
 import com.newland.mtype.module.common.security.K21SecurityModule
 import com.newland.mtypex.nseries3.NS3ConnParams
 import com.novaservices.netwalk.adapter.CaseAdapter
 import com.novaservices.netwalk.databinding.ActivityMainBinding
 import com.novaservices.netwalk.domain.CaseById
+import com.novaservices.netwalk.domain.FinishedTicket
 import com.novaservices.netwalk.domain.Operations
+import com.novaservices.netwalk.ui.auth.LoginActivity
 import com.novaservices.nova.utils.RetrofitInstance
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
-import java.io.IOException
-import java.util.Date
-import com.newland.mtype.module.common.scanner.CameraType
-import com.novaservices.netwalk.domain.FinishedTicket
-import com.novaservices.netwalk.ui.auth.LoginActivity
-import kotlinx.coroutines.CoroutineScope
 import java.io.File
+import java.io.IOException
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
+import java.time.*
 import java.time.format.DateTimeFormatter
 import java.util.Base64
-import java.time.*
+import java.util.Date
 import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
@@ -75,6 +74,7 @@ class MainActivity : AppCompatActivity() {
     private val PERMISSION_CODE = 1000
     private val IMAGE_CAPTURE_CODE = 1001
     private lateinit var imageBase64: Base64
+    private lateinit var dd: CheckBox
 
     var vFilename: String = ""
 
@@ -84,13 +84,13 @@ class MainActivity : AppCompatActivity() {
 
 
 
-    private fun getDateString(time: Long) : String = simpleDateFormat.format(time * 1000L)
-
-    private fun getDateString(time: Int) : String = simpleDateFormat.format(time * 1000L)
-
-    val dt = Instant.ofEpochSecond(45603.67519675926.toLong() * 1000L)
-        .atZone(ZoneId.systemDefault())
-        .toLocalDateTime()
+//    private fun getDateString(time: Long) : String = simpleDateFormat.format(time * 1000L)
+//
+//    private fun getDateString(time: Int) : String = simpleDateFormat.format(time * 1000L)
+//
+//    val dt = Instant.ofEpochSecond(45603.67519675926.toLong() * 1000L)
+//        .atZone(ZoneId.systemDefault())
+//        .toLocalDateTime()
 
 
 
@@ -105,7 +105,7 @@ class MainActivity : AppCompatActivity() {
         binding.usernametech.text = getIntent.getStringExtra("username")
 //        binding.regionName.text = getIntent.getStringExtra("region_id")
 
-        Toast.makeText(this@MainActivity, dt.toString(), Toast.LENGTH_LONG).show()
+//        Toast.makeText(this@MainActivity, dt.toString(), Toast.LENGTH_LONG).show()
         when (getIntent.getStringExtra("region_id")) {
             "1" -> binding.regionName.text = "Caracas"
             "2" -> binding.regionName.text = "Centro Llanos"
@@ -116,7 +116,6 @@ class MainActivity : AppCompatActivity() {
                 binding.regionName.text = "Region Por Asignar"
             }
         }
-        Toast.makeText(this@MainActivity, dt.toString(), Toast.LENGTH_LONG).show()
 // s
 //        binding.regionName.text = getIntent.getStringExtra("region_id")
         binding.xcs.setOnClickListener {
@@ -248,67 +247,180 @@ class MainActivity : AppCompatActivity() {
             binding.ticketCierre3.visibility = View.VISIBLE
         }
         binding.senDticket.setOnClickListener {
-            GlobalScope.launch(Dispatchers.IO) {
-                val response = try {
-                    val ticketResult = FinishedTicket(
-                        binding.tcid.text.toString().toInt(),
-                        resultTicketStatusFinal,
-                        "${binding.observations.text}",
-                        "N/A"
+            if(binding.fallido.isChecked == true) {
+                GlobalScope.launch(Dispatchers.IO) {
+                    val response = try {
+                        val ticketResult = FinishedTicket(
+                            binding.tcid.text.toString().toInt(),
+                            resultTicketStatusFinal,
+                            "${binding.observations.text}",
+                            "N/A"
 
-                    )
-                    RetrofitInstance.api.postFinishedTicket(ticketResult)
-                } catch (error: IOException) {
-                    Toast.makeText(this@MainActivity, "app error $error", Toast.LENGTH_LONG).show()
-                    return@launch
-                } catch (e: HttpException) {
-                    Toast.makeText(this@MainActivity, "http error $e", Toast.LENGTH_LONG).show()
-                    return@launch
-                }
-                if(response.isSuccessful && response.body() != null) {
-                    withContext(Dispatchers.Main){
-                        Toast.makeText( this@MainActivity, "Insertado Con Exito", Toast.LENGTH_LONG).show()
-                        printReciboFinal(resultTicketNumber, resultTicketStatusFinal,
-                            binding.observations.text.toString()
                         )
+                        RetrofitInstance.api.postFinishedTicket(ticketResult)
+                    } catch (error: IOException) {
+                        Toast.makeText(this@MainActivity, "app error $error", Toast.LENGTH_LONG).show()
+                        return@launch
+                    } catch (e: HttpException) {
+                        Toast.makeText(this@MainActivity, "http error $e", Toast.LENGTH_LONG).show()
+                        return@launch
+                    }
+                    if(response.isSuccessful && response.body() != null) {
+                        withContext(Dispatchers.Main){
+                            Toast.makeText( this@MainActivity, "Insertado Con Exito", Toast.LENGTH_LONG).show()
+                            printReciboFinal(resultTicketNumber, resultTicketStatusFinal,
+                                binding.observations.text.toString()
+                            )
 
-                        binding.resultadoGestion.visibility = View.GONE
+                            binding.resultadoGestion.visibility = View.GONE
 //                        binding.closeTicketCierre.visibility = View.GONE
 //                        binding.ticketCierre.visibility = View.GONE
-                        GlobalScope.launch(Dispatchers.IO) {
-                            val response = try {
-                                val cases = CaseById(
-                                    getIntent.getIntExtra("id", 0).toString(),
-                                )
+                            GlobalScope.launch(Dispatchers.IO) {
+                                val response = try {
+                                    val cases = CaseById(
+                                        getIntent.getIntExtra("id", 0).toString(),
+                                    )
 //                RetrofitInstance.api.getAllTickets()
-                                RetrofitInstance.api.getAllTicketsByUser(cases)
-                            } catch (error: IOException) {
-                                Toast.makeText(this@MainActivity, "app error $error", Toast.LENGTH_LONG).show()
-                                return@launch
-                            } catch (e: HttpException) {
-                                Toast.makeText(this@MainActivity, "http error $e", Toast.LENGTH_LONG).show()
-                                return@launch
-                            }
-                            if(response.isSuccessful && response.body() != null) {
-                                withContext(Dispatchers.Main){
+                                    RetrofitInstance.api.getAllTicketsByUser(cases)
+                                } catch (error: IOException) {
+                                    Toast.makeText(this@MainActivity, "app error $error", Toast.LENGTH_LONG).show()
+                                    return@launch
+                                } catch (e: HttpException) {
+                                    Toast.makeText(this@MainActivity, "http error $e", Toast.LENGTH_LONG).show()
+                                    return@launch
+                                }
+                                if(response.isSuccessful && response.body() != null) {
+                                    withContext(Dispatchers.Main){
 //                    if(response.body()!!.message.contains("No Existen")) {
 //                        binding.noRecharges.visibility = View.VISIBLE
 //                        Toast.makeText(context, "No existen Recargas", Toast.LENGTH_SHORT).show()
 //                    }
-                                    val recyclerView = binding.classes
-                                    recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
-                                    recyclerView.adapter = CaseAdapter(response.body()!!.data!!) {
-                                        onItemSelected(it)
+                                        val recyclerView = binding.classes
+                                        recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
+                                        recyclerView.adapter = CaseAdapter(response.body()!!.data!!) {
+                                            onItemSelected(it)
+                                        }
                                     }
+                                    binding.ticketCierre.visibility = View.GONE
+                                    binding.ticketCierreFinal.visibility = View.VISIBLE
                                 }
-                                binding.ticketCierre.visibility = View.GONE
-                                binding.ticketCierreFinal.visibility = View.VISIBLE
                             }
                         }
                     }
                 }
             }
+                GlobalScope.launch(Dispatchers.IO) {
+                    val response = try {
+                        val ticketResult = FinishedTicket(
+                            binding.tcid.text.toString().toInt(),
+                            resultTicketStatusFinal,
+                            "${binding.observations.text}",
+                            "N/A"
+
+                        )
+                        RetrofitInstance.api.postFinishedTicket(ticketResult)
+                    } catch (error: IOException) {
+                        Toast.makeText(this@MainActivity, "app error $error", Toast.LENGTH_LONG).show()
+                        return@launch
+                    } catch (e: HttpException) {
+                        Toast.makeText(this@MainActivity, "http error $e", Toast.LENGTH_LONG).show()
+                        return@launch
+                    }
+                    if(response.isSuccessful && response.body() != null) {
+                        withContext(Dispatchers.Main){
+                            Toast.makeText( this@MainActivity, "Insertado Con Exito", Toast.LENGTH_LONG).show()
+                            printReciboFinal(resultTicketNumber, resultTicketStatusFinal,
+                                binding.observations.text.toString()
+                            )
+
+                            binding.resultadoGestion.visibility = View.GONE
+//                        binding.closeTicketCierre.visibility = View.GONE
+//                        binding.ticketCierre.visibility = View.GONE
+                            GlobalScope.launch(Dispatchers.IO) {
+                                val response = try {
+                                    val cases = CaseById(
+                                        getIntent.getIntExtra("id", 0).toString(),
+                                    )
+//                RetrofitInstance.api.getAllTickets()
+                                    RetrofitInstance.api.getAllTicketsByUser(cases)
+                                } catch (error: IOException) {
+                                    Toast.makeText(this@MainActivity, "app error $error", Toast.LENGTH_LONG).show()
+                                    return@launch
+                                } catch (e: HttpException) {
+                                    Toast.makeText(this@MainActivity, "http error $e", Toast.LENGTH_LONG).show()
+                                    return@launch
+                                }
+                                if(response.isSuccessful && response.body() != null) {
+                                    withContext(Dispatchers.Main){
+//                    if(response.body()!!.message.contains("No Existen")) {
+//                        binding.noRecharges.visibility = View.VISIBLE
+//                        Toast.makeText(context, "No existen Recargas", Toast.LENGTH_SHORT).show()
+//                    }
+                                        val recyclerView = binding.classes
+                                        recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
+                                        recyclerView.adapter = CaseAdapter(response.body()!!.data!!) {
+                                            onItemSelected(it)
+                                        }
+                                    }
+                                    binding.ticketCierre.visibility = View.GONE
+                                    binding.ticketCierreFinal.visibility = View.VISIBLE
+                                }
+                            }
+                        }
+                    }
+                }
+
         }
+        binding.exitoso.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                resultTicketStatusFinal = "exitoso"
+                binding.fallido.isChecked = false
+                binding.operativo.isChecked = false
+                binding.danado.isChecked = false
+                binding.rollout.isChecked = false
+            } else {
+
+                binding.senDticket.isClickable = true
+            }
+        }
+        binding.fallido.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                resultTicketStatusFinal = "fallido"
+                binding.exitoso.isChecked = false
+                binding.operativo.isChecked = false
+                binding.danado.isChecked = false
+                binding.rollout.isChecked = false
+            }
+        }
+        binding.operativo.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                resultTicketStatusFinal = "operativo"
+                binding.exitoso.isChecked = false
+                binding.fallido.isChecked = false
+                binding.danado.isChecked = false
+                binding.rollout.isChecked = false
+            }
+        }
+        binding.danado.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                resultTicketStatusFinal = "dañado"
+                binding.exitoso.isChecked = false
+                binding.fallido.isChecked = false
+                binding.operativo.isChecked = false
+                binding.rollout.isChecked = false
+            }
+        }
+        binding.rollout.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                resultTicketStatusFinal = "rollout"
+                binding.exitoso.isChecked = false
+                binding.fallido.isChecked = false
+                binding.operativo.isChecked = false
+                binding.danado.isChecked = false
+            }
+        }
+
+
         binding.closeTicketCierreFinal.setOnClickListener {
             binding.ticketCierreFinal.visibility = View.GONE
         }
@@ -331,7 +443,7 @@ class MainActivity : AppCompatActivity() {
                 "Ejecutivo ${binding.klxcklxc.text.toString()}",
                 "Fecha de cierre ${binding.resultTicketDate.text.toString()}",
                 binding.cbvcvc.text.toString(),
-                binding.bvbvb.text.toString(), binding.zxczxc.text.toString(), binding.sdsdss.text.toString() ,"Novaservices 2024")
+                binding.bvbvb.text.toString(), binding.zxczxc.text.toString(), binding.sdsdss.text.toString())
         }
         binding.procced.setOnClickListener {
             binding.ticketCierre.visibility = View.VISIBLE
@@ -391,51 +503,7 @@ class MainActivity : AppCompatActivity() {
             binding.ticketCierre3.visibility = View.VISIBLE
             binding.ticketModal.visibility = View.GONE
         }
-        binding.exitoso.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                resultTicketStatusFinal = "exitoso"
-                binding.fallido.isChecked = false
-                binding.operativo.isChecked = false
-                binding.danado.isChecked = false
-                binding.rollout.isChecked = false
-            }
-        }
-        binding.fallido.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                resultTicketStatusFinal = "fallido"
-                binding.exitoso.isChecked = false
-                binding.operativo.isChecked = false
-                binding.danado.isChecked = false
-                binding.rollout.isChecked = false
-            }
-        }
-        binding.operativo.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                resultTicketStatusFinal = "operativo"
-                binding.exitoso.isChecked = false
-                binding.fallido.isChecked = false
-                binding.danado.isChecked = false
-                binding.rollout.isChecked = false
-            }
-        }
-        binding.danado.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                resultTicketStatusFinal = "dañado"
-                binding.exitoso.isChecked = false
-                binding.fallido.isChecked = false
-                binding.operativo.isChecked = false
-                binding.rollout.isChecked = false
-            }
-        }
-        binding.rollout.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                resultTicketStatusFinal = "rollout"
-                binding.exitoso.isChecked = false
-                binding.fallido.isChecked = false
-                binding.operativo.isChecked = false
-                binding.danado.isChecked = false
-            }
-        }
+
 
 //        binding.printButton.setOnClickListener {
 //
@@ -598,6 +666,7 @@ class MainActivity : AppCompatActivity() {
         binding.ticketEtapa.text = it.etapa
         binding.ticketAttention.text = it.zona_de_atencion
         binding.equipo.text = it.equipo
+        binding.denominacion.text = it.denominacion_comercial
 //        binding.equipoAInstalar.text = it.equipo_a_instalar
         if(it.equipo_a_instalar == "undefined") {
             binding.equipoassign.text = "N/A"
@@ -973,7 +1042,6 @@ private fun printEncabezado() {
         y: String,
         u: String,
         i: String,
-        text: String
     ) {
         try {
             deviceManager = ConnUtils.getDeviceManager()
@@ -1055,7 +1123,7 @@ private fun printEncabezado() {
                     format.enFontSize = EnFontSize.FONT_8x16*/
 //                "BANCO BNC - RIF J-30984132-7" + "Novaservices\n"
 
-                var linea = "`Informacion De Gestion\n\' Canales De Atencion\n\' ${q}\n\' ${w}\n\' ${e}\n\' ${r}\n\' ${t}\n\' ${y}\n\' ${u}\n\' ${text}\n\'`"
+                var linea = "`Informacion De Gestion\n\' Canales De Atencion\n\' Numero de ticket: ${q}\n\' Status: ${w}\n\' Observaciones: ${e}\n\' Fecha: ${r}\n\' Novaservices`"
                 var ds = getResources().getDrawable(R.drawable.nativa);
                 val drawas = ds as BitmapDrawable
                 val bitmap = drawas.bitmap
@@ -1155,7 +1223,7 @@ private fun printEncabezado() {
                 imageFormat.offset = 0
                 val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm")
                 val current = LocalDateTime.now().format(formatter)
-                var linea = "`Cierre De Gestion\n\' \n\' ${q}\n\' ${w}\n\' ${e}\n\' ${current}\n `"
+                var linea = "`Cierre De Gestion\n\' \n\' ${q.replace("ticket_#", "Numero de ticket")}\n\' Status: ${w}\n\' Observaciones${e}\n\' Fecha de cierre: ${current}\n\' Denominacion Comercial: ${binding.denominacion.text.toString()}\n\' Rif: ${binding.ticketRif2.text.toString()}\n\' Afiliado: ${binding.equipo.text.toString()}\n\" Numero de Serial: ${binding.numeroAfiliado.text.toString()} \n\' \n\' \n\' \n\' \n\'  FIRMA Y SELLO DE COMERCIO \n\' \n\' \n\' \n\' \n\' -----------------------------------------------------------\n\' \n\' \n\' \n\'`"
                 var ds = getResources().getDrawable(R.drawable.nativa);
                 val drawas = ds as BitmapDrawable
                 val bitmap = drawas.bitmap
