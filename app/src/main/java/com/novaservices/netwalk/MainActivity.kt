@@ -866,8 +866,16 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this@MainActivity, uri.toString(), Toast.LENGTH_LONG).show()
 
 
+
+            val originalString = uri as String
+            val encodedString: String = Base64.getEncoder().encodeToString(originalString.toByteArray())
+//            assertEquals("QmFlbGR1bmc=", encodedString)
+            Toast.makeText(this, encodedString.toString(), Toast.LENGTH_LONG).show();
+
+
+
 ////            longToast(file.toString())
-//
+//+
 //            //Uri of camera image
 
 //            binding.mylogo.setImageURI(uri)
@@ -1123,7 +1131,7 @@ private fun printEncabezado() {
                     format.enFontSize = EnFontSize.FONT_8x16*/
 //                "BANCO BNC - RIF J-30984132-7" + "Novaservices\n"
 
-                var linea = "`Informacion De Gestion\n\' Canales De Atencion\n\' Numero de ticket: ${q}\n\' Status: ${w}\n\' Observaciones: ${e}\n\' Fecha: ${r}\n\' Novaservices`"
+                var linea = "`Informacion De Gestion\n\' Canales De Atencion\n\' ${q}\n\' ${w}\n\' ${e}\n\' ${r}\n\' ${t}\n\' ${y}\n\' ${u}\n\' sdsdsd'`"
                 var ds = getResources().getDrawable(R.drawable.nativa);
                 val drawas = ds as BitmapDrawable
                 val bitmap = drawas.bitmap
@@ -1223,7 +1231,7 @@ private fun printEncabezado() {
                 imageFormat.offset = 0
                 val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm")
                 val current = LocalDateTime.now().format(formatter)
-                var linea = "`Cierre De Gestion\n\' \n\' ${q.replace("ticket_#", "Numero de ticket")}\n\' Status: ${w}\n\' Observaciones${e}\n\' Fecha de cierre: ${current}\n\' Denominacion Comercial: ${binding.denominacion.text.toString()}\n\' Rif: ${binding.ticketRif2.text.toString()}\n\' Afiliado: ${binding.equipo.text.toString()}\n\" Numero de Serial: ${binding.numeroAfiliado.text.toString()} \n\' \n\' \n\' \n\' \n\'  FIRMA Y SELLO DE COMERCIO \n\' \n\' \n\' \n\' \n\' -----------------------------------------------------------\n\' \n\' \n\' \n\'`"
+                var linea = "`Cierre De Gestion\n\' \n\' ${q.replace("ticket_#", "Numero de ticket: ")}\n\' Status: ${w}\n\' Observaciones: ${e}\n\' Fecha de cierre: ${current}\n\' Denominacion Comercial: ${binding.denominacion.text.toString()}\n\' Rif: ${binding.ticketRif2.text.toString()}\n\' Afiliado: ${binding.equipo.text.toString()}\n\" Numero de Serial: ${binding.numeroAfiliado.text.toString()} \n\' \n\' \n\' \n\' \n\'  FIRMA Y SELLO DE COMERCIO \n\' \n\' \n\' \n\' \n\' -----------------------------------------------------------\n\' \n\' \n\' \n\'`"
                 var ds = getResources().getDrawable(R.drawable.nativa);
                 val drawas = ds as BitmapDrawable
                 val bitmap = drawas.bitmap
