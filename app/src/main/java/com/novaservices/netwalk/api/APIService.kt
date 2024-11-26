@@ -24,6 +24,9 @@ suspend fun getAllTickets(): Response<TicketsResponse>
 @POST("ntw/get-all-cases-by-user")
 suspend fun getAllTicketsByUser(@Body NovaWalkRequest: CaseById): Response<TicketsResponse>
 
+@POST("ntw/get-all-cases-by-afiliated")
+suspend fun getAllTicketsByAfiliation(@Body NovaWalkRequest: CaseById): Response<TicketsResponse>
+
 
 @POST("login-nova-walk")
 suspend fun loginNovawalk(@Body NovaWalkRequest: NovaWalkUser): Response<LoginResponse>

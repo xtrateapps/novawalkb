@@ -5,6 +5,8 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.os.Bundle
@@ -12,12 +14,14 @@ import android.os.Environment
 import android.os.Handler
 import android.os.RemoteException
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.CheckBox
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.newland.me.ConnUtils
 import com.newland.me.DeviceManager
 import com.newland.mtype.ConnectionCloseEvent
@@ -50,14 +54,17 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileWriter
 import java.io.IOException
 import java.text.SimpleDateFormat
-import java.time.*
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Base64
 import java.util.Date
 import java.util.Locale
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -75,7 +82,7 @@ class MainActivity : AppCompatActivity() {
     private val IMAGE_CAPTURE_CODE = 1001
     private lateinit var imageBase64: Base64
     private lateinit var dd: CheckBox
-
+    private lateinit var sImage: String
     var vFilename: String = ""
 
     private val simpleDateFormat = SimpleDateFormat("dd MMMM yyyy, HH:mm:ss", Locale.ENGLISH)
@@ -171,6 +178,79 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+        }
+        binding.closeTicketCierre5.setOnClickListener {
+            binding.afiliacionModal.visibility = View.GONE
+        }
+
+        binding.searchAfiliado.setOnClickListener {
+            val afNumber = binding.afiliacionNumberc.text
+            Toast.makeText(this@MainActivity, afNumber, Toast.LENGTH_LONG).show()
+            GlobalScope.launch(Dispatchers.IO) {
+                val response = try {
+                    val cases = CaseById(
+                        afNumber.toString(),
+                    )
+//                RetrofitInstance.api.getAllTickets()
+                    RetrofitInstance.api.getAllTicketsByAfiliation(cases)
+                } catch (error: IOException) {
+                    Log.i("afiliated", error.toString())
+                    this@MainActivity.runOnUiThread(Runnable {
+                        Toast.makeText(this@MainActivity, "app error $error", Toast.LENGTH_LONG).show()
+                    })
+                    return@launch
+                } catch (e: HttpException) {
+                    Log.i("afiliated", e.toString())
+                    this@MainActivity.runOnUiThread(Runnable {
+                        Toast.makeText(this@MainActivity, "http error $e", Toast.LENGTH_LONG).show()
+                    })
+                    return@launch
+                }
+                if(response.isSuccessful && response.body() != null) {
+                    withContext(Dispatchers.Main){
+                        Log.i("afiliated", response.body().toString())
+//                        this@MainActivity.runOnUiThread(Runnable {
+//                            Toast.makeText(
+//                                this@MainActivity,
+//                                response.body().toString(),
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+//                        })
+//                    if(response.body()!!.message.contains("No Existen")) {
+//                        binding.noRecharges.visibility = View.VISIBLE
+//                        Toast.makeText(context, "No existen Recargas", Toast.LENGTH_SHORT).show()
+//                    }
+                        binding.searcher.visibility = View.GONE
+                        binding.toUpdate.visibility = View.VISIBLE
+                        val fieldsToChange = response.body()!!.data!![0]
+                        binding.aad.setText(response.body()!!.data!![0].direccion.toString())
+                            binding.cel.setText(response.body()!!.data!![0].telefono_2.toString())
+                        binding.tcv.setText(response.body()!!.data!![0].telefono_2.toString())
+//                        binding.nc.setText()
+                        binding.se.setText(response.body()!!.data!![0].equipo.toString())
+
+                        binding.registerAfiliated.setOnClickListener {
+                            this@MainActivity.runOnUiThread(Runnable {
+                                Toast.makeText(this@MainActivity, "Actualizado con exito", Toast.LENGTH_LONG).show()
+                            })
+                            binding.toUpdate.visibility = View.GONE
+                            binding.afiliacionModal.visibility = View.GONE
+                        }
+                    }
+                } else {
+                    binding.toUpdate.visibility = View.VISIBLE
+                }
+            }
+        }
+
+//        {
+//            binding.aad.setText(response.body()!!.data!![0].direccion.toString())
+//            binding.cel.setText(response.body()!!.data!![0].telefono_2.toString())
+//            binding.tcv.setText(response.body()!!.data!![0].telefono_2.toString())
+//        }
+
+        binding.afiliacionChange.setOnClickListener {
+            binding.afiliacionModal.visibility = View.VISIBLE
         }
 
         GlobalScope.launch(Dispatchers.IO) {
@@ -648,9 +728,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
     private fun onItemSelected(it: Operations)  {
-//        var ds = Date(Long.it.fecha_de_inicio!!.toInt() * 1000)
-        var ds = getDateTimeFromEpocLongOfSeconds(it.fecha_de_inicio!!.toDouble().toLong())
-        var sd = getDateTimeFromEpocLongOfSeconds2(it.fecha_final!!.toDouble().toLong())
         binding.ticketModal.visibility = View.VISIBLE
         binding.tcid.text = it.id
         binding.tcid.visibility = View.GONE
@@ -658,9 +735,9 @@ class MainActivity : AppCompatActivity() {
         binding.ticketProyect.text = it.proyecto!!
         binding.ticketAssigned.text = it.asignada_a
         binding.ticketDocumentOrigen.text = it.documento_origen
-        binding.ticketStart.text = ds
+        binding.ticketStart.text = it.fecha_de_inicio
         binding.afiliacion.text = it.numero_de_afiliacion
-        binding.ticketFinal.text = sd
+        binding.ticketFinal.text = it.fecha_final
         binding.ticketType.text = it.tipo_de_tarea
         binding.ticketInicial.text = it.fecha_de_inicio
         binding.ticketEtapa.text = it.etapa
@@ -863,14 +940,60 @@ class MainActivity : AppCompatActivity() {
             //File object of camera image
             val file = File(Environment.getExternalStorageDirectory().path, vFilename);
             val uri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider", file);
-            Toast.makeText(this@MainActivity, uri.toString(), Toast.LENGTH_LONG).show()
+
+            fun writeFileOnInternalStorage(mcoContext: Context, sFileName: String?, sBody: String?) {
+                val dir = File(mcoContext.filesDir, "mydir")
+                if (!dir.exists()) {
+                    dir.mkdir()
+                }
+
+                try {
+                    val gpxfile = File(dir, sFileName)
+                    val writer = FileWriter(gpxfile)
+                    writer.append(sBody)
+                    writer.flush()
+                    writer.close()
+                } catch (e: java.lang.Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+
+            Log.i("encodexxx", file.toString())
+            Log.i("encodexxx", uri.toString())
+            try {
+                val bm = BitmapFactory.decodeFile(file.toString())
+                val stream2 = ByteArrayOutputStream()
+                bm.compress(Bitmap.CompressFormat.JPEG, 100, stream2)
+                val byteFormat = stream2.toByteArray()
+                val imgString = Base64.getEncoder().encodeToString(byteFormat)
+                Log.i("encodexxx", imgString)
+
+                Glide.with(this).load(file).into(binding.mylogo);
+//                =========================================
 
 
 
-            val originalString = uri as String
-            val encodedString: String = Base64.getEncoder().encodeToString(originalString.toByteArray())
-//            assertEquals("QmFlbGR1bmc=", encodedString)
-            Toast.makeText(this, encodedString.toString(), Toast.LENGTH_LONG).show();
+
+                val bitmapToEncode: Bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+                Log.i("encodexxx", bitmapToEncode.toString())
+                val stream: ByteArrayOutputStream = ByteArrayOutputStream();
+                bitmapToEncode.compress(Bitmap.CompressFormat.JPEG,100, stream)
+                Log.i("encodexxx", bitmapToEncode.toString())
+                var bytes = byteArrayOf()
+                val ccx = uri.toString()
+                val encodedString = Base64.getEncoder().encodeToString(ccx.toByteArray())
+
+                Log.i("encodexxx64", encodedString.toString())
+//                bytes = stream.toByteArray()
+//                Log.i("encodexxx", bitmapToEncode.toString())
+            }catch (e: IOException) {
+//                e.printStackTrace();
+            }
+
+
+
+
 
 
 
@@ -883,7 +1006,23 @@ class MainActivity : AppCompatActivity() {
     }
 
 //    private fun printEncabezado(q:String,w:String,e:String,r:String,t:String,y:String,u:String,i:String,o:String,p:String,a:String,s:String,d:String,f:String,g:String,h:String,j:String) {
-private fun printEncabezado() {
+fun writeFileOnInternalStorage(mcoContext: Context, sFileName: String?, sBody: String?) {
+    val dir = File(mcoContext.filesDir, "mydir")
+    if (!dir.exists()) {
+        dir.mkdir()
+    }
+
+    try {
+        val gpxfile = File(dir, sFileName)
+        val writer = FileWriter(gpxfile)
+        writer.append(sBody)
+        writer.flush()
+        writer.close()
+    } catch (e: java.lang.Exception) {
+        e.printStackTrace()
+    }
+}
+    private fun printEncabezado() {
         try {
             deviceManager = ConnUtils.getDeviceManager()
             deviceConnParams = NS3ConnParams()
