@@ -1,20 +1,25 @@
 package com.novaservices.lotonovabanklot.data.api
 
+import android.telecom.Call
 import com.novaservices.lotonovabanklot.domain.LoginResponse
 import com.novaservices.lotonovabanklot.domain.Manager
 import com.novaservices.lotonovabanklot.domain.Play
 import com.novaservices.lotonovabanklot.domain.RequestResponse
-import com.novaservices.netwalk.domain.Case
 import com.novaservices.netwalk.domain.CaseById
 import com.novaservices.netwalk.domain.FinishedTicket
+import com.novaservices.netwalk.domain.MerchantData
 import com.novaservices.netwalk.domain.NovaWalkUser
 import com.novaservices.netwalk.domain.TicketsResponse
-import org.json.JSONObject
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 import java.io.File
+
 
 interface APIService {
 //    NetWalk
@@ -27,6 +32,8 @@ suspend fun getAllTicketsByUser(@Body NovaWalkRequest: CaseById): Response<Ticke
 @POST("ntw/get-all-cases-by-afiliated")
 suspend fun getAllTicketsByAfiliation(@Body NovaWalkRequest: CaseById): Response<TicketsResponse>
 
+@POST("ntw/insert-merchant-data")
+suspend fun insertUpdatedMerchantData(@Body NovaWalkRequest: MerchantData): Response<RequestResponse>
 
 @POST("login-nova-walk")
 suspend fun loginNovawalk(@Body NovaWalkRequest: NovaWalkUser): Response<LoginResponse>
@@ -38,9 +45,18 @@ suspend fun registerNovawalk(@Body NovaWalkRequest: NovaWalkUser): Response<Requ
 suspend fun postFinishedTicket(@Body ticketRequest: FinishedTicket): Response<RequestResponse>
 
 
+@Multipart
+@POST("image")
+suspend fun uploadFile(
+    @Part file: MultipartBody.Part?,
+    @Part("file") name: RequestBody?,
+    @Part("id") id: String
+): Response<RequestResponse?>?
 
-
-
+//    @Multipart
+//    suspend fun uploadImage(
+//        @Part image: MultipartBody.Part
+//    )
 //
 
 
