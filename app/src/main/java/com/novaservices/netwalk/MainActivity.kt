@@ -17,6 +17,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.CheckBox
+import android.widget.ScrollView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
@@ -82,6 +83,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var resultTicketNumber: String
     private lateinit var resultTicketSubscripted: String
     private lateinit var resultTicketStatusFinal: String
+    private lateinit var resultTicketStatusId: String
     private val PERMISSION_CODE = 1000
     private val IMAGE_CAPTURE_CODE = 1001
     private lateinit var imageBase64: Base64
@@ -214,17 +216,6 @@ class MainActivity : AppCompatActivity() {
                 if(response.isSuccessful && response.body() != null) {
                     withContext(Dispatchers.Main){
                         Log.i("afiliated", response.body().toString())
-//                        this@MainActivity.runOnUiThread(Runnable {
-//                            Toast.makeText(
-//                                this@MainActivity,
-//                                response.body().toString(),
-//                                Toast.LENGTH_SHORT
-//                            ).show()
-//                        })
-//                    if(response.body()!!.message.contains("No Existen")) {
-//                        binding.noRecharges.visibility = View.VISIBLE
-//                        Toast.makeText(context, "No existen Recargas", Toast.LENGTH_SHORT).show()
-//                    }
                         binding.searcher.visibility = View.GONE
                         binding.toUpdate.visibility = View.VISIBLE
                         val fieldsToChange = response.body()!!.data!![0]
@@ -269,8 +260,6 @@ class MainActivity : AppCompatActivity() {
                                     binding.afiliacionModal.visibility = View.GONE
                                 }
                             }
-
-
                         }
                     }
                 } else {
@@ -278,23 +267,14 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
-//        {
-//            binding.aad.setText(response.body()!!.data!![0].direccion.toString())
-//            binding.cel.setText(response.body()!!.data!![0].telefono_2.toString())
-//            binding.tcv.setText(response.body()!!.data!![0].telefono_2.toString())
-//        }
-
         binding.afiliacionChange.setOnClickListener {
             binding.afiliacionModal.visibility = View.VISIBLE
         }
-
         GlobalScope.launch(Dispatchers.IO) {
             val response = try {
                 val cases = CaseById(
                     getIntent.getIntExtra("id", 0).toString(),
                 )
-//                RetrofitInstance.api.getAllTickets()
                 RetrofitInstance.api.getAllTicketsByUser(cases)
             } catch (error: IOException) {
                 Toast.makeText(this@MainActivity, "app error $error", Toast.LENGTH_LONG).show()
@@ -305,10 +285,6 @@ class MainActivity : AppCompatActivity() {
             }
             if(response.isSuccessful && response.body() != null) {
                 withContext(Dispatchers.Main){
-//                    if(response.body()!!.message.contains("No Existen")) {
-//                        binding.noRecharges.visibility = View.VISIBLE
-//                        Toast.makeText(context, "No existen Recargas", Toast.LENGTH_SHORT).show()
-//                    }
                     val recyclerView = binding.classes
                     recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
                     recyclerView.adapter = CaseAdapter(response.body()!!.data!!) {
@@ -327,7 +303,6 @@ class MainActivity : AppCompatActivity() {
             binding.ticketModal.visibility = View.GONE
 
         }
-//
         binding.exitoso1.setOnClickListener {
             binding.conditionals.visibility = View.GONE
             binding.observations.setText(binding.exitoso1tv.text)
@@ -368,15 +343,38 @@ class MainActivity : AppCompatActivity() {
         binding.exitoso1.setOnClickListener {
             binding.conditionals.visibility = View.GONE
             binding.observations.setText(binding.exitoso1tv.text)
+            binding.senDticket.visibility = View.VISIBLE
         }
+
+        binding.fallido2.setOnClickListener {
+            binding.conditionals.visibility = View.GONE
+            binding.observations.setText(binding.fallido2tv.text)
+            binding.senDticket.visibility = View.VISIBLE
+        }
+
+        binding.fallido3.setOnClickListener {
+            binding.conditionals.visibility = View.GONE
+            binding.observations.setText(binding.fallido3tv.text)
+            binding.senDticket.visibility = View.VISIBLE
+        }
+
+        binding.fallido5.setOnClickListener {
+            binding.conditionals.visibility = View.GONE
+            binding.observations.setText(binding.fallido5tv.text)
+            binding.senDticket.visibility = View.VISIBLE
+        }
+
+        binding.operativo.setOnClickListener {
+            binding.conditionals.visibility = View.GONE
+            binding.observations.setText(binding.exitoso1tv.text)
+            binding.senDticket.visibility = View.VISIBLE
+        }
+
+
         binding.vt.setOnClickListener {
             binding.ticketModal.visibility = View.GONE
             binding.ticketCierre3.visibility = View.VISIBLE
 
-        }
-        binding.exitoso1.setOnClickListener {
-            binding.conditionals.visibility = View.GONE
-            binding.observations.setText(binding.exitoso1tv.text)
         }
         binding.prv.setOnClickListener {
             binding.ticketCierre.visibility = View.VISIBLE
@@ -393,30 +391,8 @@ class MainActivity : AppCompatActivity() {
             binding.ticketCierre3.visibility = View.VISIBLE
 
         }
-        binding.exitoso1.setOnClickListener {
-            binding.observations.setText(binding.exitoso1tv.text)
-        }
         binding.senDticket.setOnClickListener {
-
-            binding.exitoso1.setOnClickListener {
-                binding.conditionals.visibility = View.GONE
-                binding.observations.setText(binding.exitoso1tv.text)
-            }
-
-//            binding.exitoso1.visibility = View.VISIBLE
-//            binding.fallido.visibility = View.VISIBLE
-//            binding.fallido2.visibility = View.VISIBLE
-//            binding.fallido3.visibility = View.VISIBLE
-//            binding.fallido5.visibility = View.VISIBLE
             binding.conditionals.visibility = View.GONE
-//            binding.exitoso1.visibility = View.VISIBLE
-//            binding.fallido.visibility = View.VISIBLE
-//            binding.fallido2.visibility = View.VISIBLE
-//            binding.fallido3.visibility = View.VISIBLE
-//            binding.fallido5.visibility = View.VISIBLE
-
-
-
             if(binding.fallido.isChecked == true) {
                 GlobalScope.launch(Dispatchers.IO) {
                     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm")
@@ -428,7 +404,7 @@ class MainActivity : AppCompatActivity() {
                             "${binding.observations.text}",
                             "N/A",
                             current,
-                            resultTicketNumber
+                            resultTicketStatusId.toString()
                         )
                         RetrofitInstance.api.postFinishedTicket(ticketResult)
                     } catch (error: IOException) {
@@ -476,6 +452,9 @@ class MainActivity : AppCompatActivity() {
                                     }
                                     binding.ticketCierre.visibility = View.GONE
                                     binding.ticketCierreFinal.visibility = View.VISIBLE
+                                    val scrollViewM: ScrollView = binding.main
+                                    val top = binding.ticketCierreFinal.getTop()
+                                    scrollViewM.scrollTo(0, top - 390);
                                 }
                             }
                         }
@@ -492,7 +471,7 @@ class MainActivity : AppCompatActivity() {
                             "${binding.observations.text}",
                             "N/A",
                             current,
-                            resultTicketNumber
+                            resultTicketStatusId.toString()
                         )
                         RetrofitInstance.api.postFinishedTicket(ticketResult)
                     } catch (error: IOException) {
@@ -538,6 +517,9 @@ class MainActivity : AppCompatActivity() {
                                             onItemSelected(it)
                                         }
                                     }
+                                    val scrollViewM: ScrollView = binding.main
+                                    val top = binding.ticketCierreFinal.getTop()
+                                    scrollViewM.scrollTo(0, top - 410);
                                     binding.ticketCierre.visibility = View.GONE
                                     binding.ticketCierreFinal.visibility = View.VISIBLE
                                 }
@@ -545,24 +527,21 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
-
         }
         binding.exitoso.setOnCheckedChangeListener { _, isChecked ->
-            binding.conditionals.visibility = View.VISIBLE
-            binding.exitoso1.visibility = View.VISIBLE
+            binding.observations.setText(binding.exitoso1tv.text)
             if (isChecked) {
                 resultTicketStatusFinal = "exitoso"
                 binding.fallido.isChecked = false
                 binding.operativo.isChecked = false
                 binding.danado.isChecked = false
                 binding.rollout.isChecked = false
-
             } else {
-
                 binding.senDticket.isClickable = true
             }
         }
         binding.fallido.setOnCheckedChangeListener { _, isChecked ->
+            binding.exitoso1.visibility = View.GONE
             binding.fallido.visibility = View.VISIBLE
             binding.fallido2.visibility = View.VISIBLE
             binding.fallido3.visibility = View.VISIBLE
@@ -576,9 +555,13 @@ class MainActivity : AppCompatActivity() {
                 binding.rollout.isChecked = false
             }
         }
-        binding.operativo.setOnCheckedChangeListener { buttonView, isChecked ->
+        binding.operativo.setOnCheckedChangeListener { _, isChecked ->
             binding.conditionals.visibility = View.VISIBLE
             binding.exitoso1.visibility = View.VISIBLE
+            binding.fallido.visibility = View.GONE
+            binding.fallido2.visibility = View.GONE
+            binding.fallido3.visibility = View.GONE
+            binding.fallido5.visibility = View.GONE
             if (isChecked) {
                 resultTicketStatusFinal = "operativo"
                 binding.exitoso.isChecked = false
@@ -593,6 +576,7 @@ class MainActivity : AppCompatActivity() {
             binding.fallido2.visibility = View.VISIBLE
             binding.fallido3.visibility = View.VISIBLE
             binding.fallido5.visibility = View.VISIBLE
+            binding.exitoso1.visibility = View.GONE
             if (isChecked) {
                 resultTicketStatusFinal = "dañado"
                 binding.exitoso.isChecked = false
@@ -607,6 +591,7 @@ class MainActivity : AppCompatActivity() {
             binding.fallido2.visibility = View.VISIBLE
             binding.fallido3.visibility = View.VISIBLE
             binding.fallido5.visibility = View.VISIBLE
+            binding.exitoso1.visibility = View.GONE
             if (isChecked) {
                 resultTicketStatusFinal = "rollout"
                 binding.exitoso.isChecked = false
@@ -632,7 +617,6 @@ class MainActivity : AppCompatActivity() {
         binding.endTicket.setOnClickListener {
             try {
                 if(FileToSend.length() > 0) {
-                    Toast.makeText(this, "its not all right", Toast.LENGTH_LONG).show()
                     Log.i("photodamn", FileToSend.toString())
                     GlobalScope.launch(Dispatchers.IO) {
                         val file = FileToSend
@@ -662,10 +646,14 @@ class MainActivity : AppCompatActivity() {
                             this@MainActivity.runOnUiThread(Runnable {
                                 Toast.makeText(this@MainActivity, "this is so complicated", Toast.LENGTH_LONG).show()
                                 Toast.makeText(this@MainActivity, response.body().toString(), Toast.LENGTH_LONG).show()
+
+                                binding.ticketCierreFinal.visibility = View.GONE
                             })
-
-
                         }
+                        this@MainActivity.runOnUiThread(Runnable {
+
+                            binding.ticketCierreFinal.visibility = View.GONE
+                        })
                     }
 
 
@@ -693,9 +681,9 @@ class MainActivity : AppCompatActivity() {
         binding.procced.setOnClickListener {
             binding.ticketCierre.visibility = View.VISIBLE
             binding.ticketModal.visibility = View.GONE
-//            val scrollViewM: ScrollView = binding.main
-//            val top = binding.ticketCierre.getTop()
-//            scrollViewM.scrollTo(0, top + 450);
+            val scrollViewM: ScrollView = binding.main
+            val top = binding.ticketCierre.getTop()
+            scrollViewM.scrollTo(0, top - 390);
         }
 
         binding.vt.setOnClickListener {
@@ -893,6 +881,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
     private fun onItemSelected(it: Operations)  {
+        resultTicketStatusId = it.id.toString()
         binding.ticketModal.visibility = View.VISIBLE
         binding.tcid.text = it.id
         binding.tcid.visibility = View.GONE
