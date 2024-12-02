@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -79,7 +80,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var securityModule: K21SecurityModule
     private lateinit var printerModule: Printer
     private lateinit var cameraModule: CameraType
-    private lateinit var  context: Context
+    private lateinit var context: Context
     private lateinit var resultTicketNumber: String
     private lateinit var resultTicketSubscripted: String
     private lateinit var resultTicketStatusFinal: String
@@ -91,6 +92,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sImage: String
     private lateinit var FileToSend: File
     var vFilename: String = ""
+    private lateinit var FileToSendBASE64: String
 
     private val simpleDateFormat = SimpleDateFormat("dd MMMM yyyy, HH:mm:ss", Locale.ENGLISH)
 
@@ -468,10 +470,11 @@ class MainActivity : AppCompatActivity() {
                         val ticketResult = FinishedTicket(
                             binding.tcid.text.toString().toInt(),
                             resultTicketStatusFinal,
+                            
                             "${binding.observations.text}",
                             "N/A",
                             current,
-                            resultTicketStatusId.toString()
+                            resultTicketNumber.toString()
                         )
                         RetrofitInstance.api.postFinishedTicket(ticketResult)
                     } catch (error: IOException) {
@@ -542,7 +545,6 @@ class MainActivity : AppCompatActivity() {
         }
         binding.fallido.setOnCheckedChangeListener { _, isChecked ->
             binding.exitoso1.visibility = View.GONE
-            binding.fallido.visibility = View.VISIBLE
             binding.fallido2.visibility = View.VISIBLE
             binding.fallido3.visibility = View.VISIBLE
             binding.fallido5.visibility = View.VISIBLE
@@ -558,7 +560,6 @@ class MainActivity : AppCompatActivity() {
         binding.operativo.setOnCheckedChangeListener { _, isChecked ->
             binding.conditionals.visibility = View.VISIBLE
             binding.exitoso1.visibility = View.VISIBLE
-            binding.fallido.visibility = View.GONE
             binding.fallido2.visibility = View.GONE
             binding.fallido3.visibility = View.GONE
             binding.fallido5.visibility = View.GONE
@@ -572,7 +573,6 @@ class MainActivity : AppCompatActivity() {
         }
         binding.danado.setOnCheckedChangeListener { buttonView, isChecked ->
             binding.conditionals.visibility = View.VISIBLE
-            binding.fallido.visibility = View.VISIBLE
             binding.fallido2.visibility = View.VISIBLE
             binding.fallido3.visibility = View.VISIBLE
             binding.fallido5.visibility = View.VISIBLE
@@ -587,7 +587,6 @@ class MainActivity : AppCompatActivity() {
         }
         binding.rollout.setOnCheckedChangeListener { buttonView, isChecked ->
             binding.conditionals.visibility = View.VISIBLE
-            binding.fallido.visibility = View.VISIBLE
             binding.fallido2.visibility = View.VISIBLE
             binding.fallido3.visibility = View.VISIBLE
             binding.fallido5.visibility = View.VISIBLE
@@ -619,18 +618,19 @@ class MainActivity : AppCompatActivity() {
                 if(FileToSend.length() > 0) {
                     Log.i("photodamn", FileToSend.toString())
                     GlobalScope.launch(Dispatchers.IO) {
-                        val file = FileToSend
+                        BitmapFactory.decodeFile(binding.mylogo.drawable.toString())
+                        val file = binding.mylogo.drawable as File
+
+                        Log.i("photodamn", FileToSend.toString())
                         val requestBody = RequestBody.create(MediaType.parse("*/*"), file)
                         val fileToSend = MultipartBody.Part.createFormData("file",file.name, requestBody)
                         val filename = RequestBody.create(MediaType.parse("text/plain"), file.name)
-                        val id = binding.resultTicketNumber.text
-
+                        val id = resultTicketStatusId
+                        Log.i("photodamn", id.toString())
 //                        val map = HashMap<String, RequestBody>()
 //                        map.put("file\"; filename=\"" + file.name + "\"", requestBody)
-                        Log.i("photodamn", requestBody.toString())
-                        Log.i("photodamn", fileToSend.toString())
                         val response = try {
-                            RetrofitInstance.api.uploadFile(fileToSend, filename, id.toString())
+                            RetrofitInstance.api.uploadFile(fileToSend, filename, id.toString(), FileToSendBASE64.toString())
                         } catch (error: IOException) {
                             this@MainActivity.runOnUiThread(Runnable {
                                 Toast.makeText(this@MainActivity, "app error $error", Toast.LENGTH_LONG).show()
@@ -644,7 +644,7 @@ class MainActivity : AppCompatActivity() {
                         }
                         if(response!!.isSuccessful && response.body() != null) {
                             this@MainActivity.runOnUiThread(Runnable {
-                                Toast.makeText(this@MainActivity, "this is so complicated", Toast.LENGTH_LONG).show()
+                                Toast.makeText(this@MainActivity, "Exitoso", Toast.LENGTH_LONG).show()
                                 Toast.makeText(this@MainActivity, response.body().toString(), Toast.LENGTH_LONG).show()
 
                                 binding.ticketCierreFinal.visibility = View.GONE
@@ -1046,7 +1046,7 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
-
+// ----------------------------------------------------------------------------------------------------
     private fun openCamera() {
         val values = ContentValues()
         values.put(MediaStore.Images.Media.TITLE, "New Picture")
@@ -1057,7 +1057,7 @@ class MainActivity : AppCompatActivity() {
 
         // set filename
         val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        vFilename = "FOTO_" + timeStamp + ".jpg"
+        vFilename = "FOTO4444_" + timeStamp + ".png"
 
         // set direcory folder
         val file = File(Environment.getExternalStorageDirectory().getPath(), vFilename);
@@ -1066,6 +1066,8 @@ class MainActivity : AppCompatActivity() {
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri)
         startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE)
     }
+//    ---------------------------------------------------------------------------------------------
+
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -1121,27 +1123,29 @@ class MainActivity : AppCompatActivity() {
             try {
                 val bm = BitmapFactory.decodeFile(file.toString())
                 val stream2 = ByteArrayOutputStream()
-                bm.compress(Bitmap.CompressFormat.JPEG, 100, stream2)
+                bm.compress(Bitmap.CompressFormat.PNG, 100, stream2)
                 val byteFormat = stream2.toByteArray()
                 val imgString = Base64.getEncoder().encodeToString(byteFormat)
                 Log.i("encodexxx", imgString)
 
-//                Glide.with(this).load(file).into(binding.mylogo);
+                Glide.with(this).load(file).into(binding.mylogo);
 //                =========================================
 
 
 
 
                 val bitmapToEncode: Bitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
-                Log.i("encodexxx", bitmapToEncode.toString())
+                Log.i("encodexxxxc", bitmapToEncode.toString())
                 val stream: ByteArrayOutputStream = ByteArrayOutputStream();
-                bitmapToEncode.compress(Bitmap.CompressFormat.JPEG,100, stream)
+                bitmapToEncode.compress(Bitmap.CompressFormat.PNG,100, stream)
                 Log.i("encodexxx", bitmapToEncode.toString())
                 var bytes = byteArrayOf()
                 val ccx = uri.toString()
                 val encodedString = Base64.getEncoder().encodeToString(ccx.toByteArray())
+                FileToSendBASE64 = imgString
 
-                Log.i("encodexxx64", encodedString.toString())
+                Log.i("encodexxx64", FileToSendBASE64.toString())
+
 //                bytes = stream.toByteArray()
 //                Log.i("encodexxx", bitmapToEncode.toString())
             }catch (e: IOException) {
