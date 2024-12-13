@@ -51,7 +51,6 @@ suspend fun uploadFile(
     @Part file: MultipartBody.Part?,
     @Part("file") name: RequestBody?,
     @Part("id") id: String,
-    @Part("FileToSendBASE64") FileToSendBASE64: String
 ): Response<RequestResponse?>?
 
 //    @Multipart
