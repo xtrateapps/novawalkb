@@ -130,7 +130,14 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this@MainActivity, LoginActivity::class.java)
             startActivity(intent)
         }
-        binding.aflx.setOnClickListener {
+        binding.afl2.setOnClickListener {
+            binding.toUpdate.visibility = View.GONE
+        }
+
+
+
+
+        binding.closeplease.setOnClickListener {
             binding.afiliacionModal.visibility = View.GONE
         }
         binding.af.setOnClickListener {
@@ -431,6 +438,7 @@ class MainActivity : AppCompatActivity() {
                 binding.ticketModal.visibility = View.GONE
             }
 
+//            binding.close.setOnc
 //            binding.conditionals.visibility = View.GONE
 //            if (binding.fallido.isChecked == true) {
 //                GlobalScope.launch(Dispatchers.IO) {
@@ -1525,7 +1533,7 @@ class MainActivity : AppCompatActivity() {
                 try {
 
 
-                    format2.enFontSize = EnFontSize.FONT_32x32B
+                    format2.enFontSize = EnFontSize.FONT_24x32
 
 
 //                Xq no me salen algnuos campos
@@ -1549,13 +1557,12 @@ class MainActivity : AppCompatActivity() {
                     imageFormat.offset = 0
                     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm")
                     val current = LocalDateTime.now().format(formatter)
-                    var linea2 = "`${q}`"
-                    var linea = "`Cierre De Gestion\n\' \n\' ${
-                        q.replace(
-                            "ticket_#",
-                            "Numero de ticket: "
-                        )
-                    }\n\' Status: ${w}\n\' Observaciones: ${e}\n\' Fecha cierre: ${current}\n\' Denominacion Comercial: ${binding.denominacionComercial.text}\n\' Rif: ${binding.ticketRif2.text.toString()}\n\' Afiliado: ${binding.numeroAfiliado.text.toString()}\n\" Numero de Serial: ${binding.equipo.text.toString()} \n\' \n\' \n\' \n\' \n\'  FIRMA Y SELLO DE COMERCIO \n\' \n\' \n\' \n\' \n\' -----------------------------------------------------------\n\' \n\' \n\' \n\'`"
+                    var new = q.replace(
+                        "ticket_#",
+                        ""
+                    )
+                    var linea2 = "`${new}\n\'`"
+                    var linea = "`Cierre De Gestion\n\' \n\' ${new}\n\' Status: ${w}\n\' Observaciones: ${e}\n\' Fecha cierre: ${current}\n\' Denominacion Comercial: ${binding.denominacionComercial.text}\n\' Rif: ${binding.ticketRif2.text.toString()}\n\' Afiliado: ${binding.numeroAfiliado.text.toString()}\n\" Numero de Serial: ${binding.equipo.text.toString()} \n\' \n\' \n\' \n\' \n\'  FIRMA Y SELLO DE COMERCIO \n\' \n\' \n\' \n\' \n\' -----------------------------------------------------------\n\' \n\' \n\' \n\'`"
                     var ds = getResources().getDrawable(R.drawable.nativa);
                     val drawas = ds as BitmapDrawable
                     val bitmap = drawas.bitmap

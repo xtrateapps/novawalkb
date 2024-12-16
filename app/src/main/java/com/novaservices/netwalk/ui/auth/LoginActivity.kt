@@ -1,17 +1,14 @@
 package com.novaservices.netwalk.ui.auth
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.novaservices.lotonovabanklot.domain.Manager
 import com.novaservices.netwalk.MainActivity
-import com.novaservices.netwalk.R
 import com.novaservices.netwalk.databinding.ActivityLoginBinding
 import com.novaservices.netwalk.domain.NovaWalkUser
 import com.novaservices.nova.utils.RetrofitInstance
@@ -22,6 +19,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.io.IOException
+
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -37,6 +35,8 @@ class LoginActivity : AppCompatActivity() {
 //        }
 
         binding.loginLink.setOnClickListener {
+            val imm = applicationContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(binding.username.getWindowToken(), 0)
             if(binding.username.text.toString() == "" || binding.password.text.toString() == "") {
                 Toast.makeText(
                     this@LoginActivity,
@@ -158,9 +158,6 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
             }
-
-
-
         }
     }
 }
