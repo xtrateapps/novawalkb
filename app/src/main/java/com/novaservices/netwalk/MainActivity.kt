@@ -41,6 +41,7 @@ import com.novaservices.netwalk.databinding.ActivityMainBinding
 import com.novaservices.netwalk.domain.CaseById
 import com.novaservices.netwalk.domain.FinishedTicket
 import com.novaservices.netwalk.domain.Operations
+import com.novaservices.netwalk.ui.auth.CameraXActivity
 import com.novaservices.netwalk.ui.auth.LoginActivity
 import com.novaservices.nova.utils.RetrofitInstance
 import kotlinx.coroutines.CoroutineScope
@@ -609,7 +610,9 @@ class MainActivity : AppCompatActivity() {
             }
         }
         binding.xcs.setOnClickListener {
-            openCamera()
+
+            val intent = Intent(this@MainActivity, CameraXActivity::class.java)
+            startActivity(intent)
         }
         binding.endTicket.setOnClickListener {
             printReciboFinal2(
