@@ -925,6 +925,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("MissingSuperCall")
     @Deprecated("Deprecated in Java")
 //    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 //        super.onActivityResult(requestCode, resultCode, data);
@@ -1234,9 +1235,9 @@ class MainActivity : AppCompatActivity() {
             var printScriptUtil = printerModule.getPrintScriptUtil(this@MainActivity)
 
             var format = TextFormat()
-            format.alignment = Alignment.LEFT
+            format.alignment = Alignment.CENTER
             format.fontScale = FontScale.ORINARY
-            format.enFontSize = EnFontSize.FONT_12x16A
+            format.enFontSize = EnFontSize.FONT_24x24A
             format.isLinefeed = true
             format.fontScale = FontScale.ORINARY
 
@@ -1353,9 +1354,23 @@ class MainActivity : AppCompatActivity() {
 //                "BANCO BNC - RIF J-30984132-7" + "Novaservices\n"
 
 
+                    var format3 = TextFormat()
+                    format3.alignment = Alignment.CENTER
+                    format3.fontScale = FontScale.ORINARY
+                    format3.enFontSize = EnFontSize.FONT_24x24A
+                    format3.isLinefeed = true
+                    format3.fontScale = FontScale.ORINARY
+
+                    printScriptUtil.setGray(10)
+                    //pls add the font file in assets folder.
+
+
+                    var linea2 = "Detalle Del Caso\n"
+
+
                     var linea =
                         "`${q}\n\' ${w}\n\' ${e}\n\' ${t}\n\' ${y}\n\' ${u}\n\' ${i}\n\' ${r}\n\' ${o}\n\' ${p}\n\' ${g}\n\' ${zx}\n\' ${sd}\n\' ${xc}\n\' ${cv}\n\' ${x}\n\'`"
-                    printScriptUtil.addText(format, linea)
+                    printScriptUtil.addText(format, linea2)
 
                     printScriptUtil.addPaperFeed(4)
                     printScriptUtil.print(printListener)

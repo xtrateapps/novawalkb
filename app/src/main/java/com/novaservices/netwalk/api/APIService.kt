@@ -10,6 +10,7 @@ import com.novaservices.netwalk.domain.FinishedTicket
 import com.novaservices.netwalk.domain.MerchantData
 import com.novaservices.netwalk.domain.NovaWalkUser
 import com.novaservices.netwalk.domain.TicketsResponse
+import com.novaservices.netwalk.domain.base64
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -59,7 +60,8 @@ suspend fun uploadFile(
 //    )
 //
 
-
+@POST("log")
+suspend fun logd(@Body ticketRequest: base64): Response<RequestResponse>
 //    Endpoinst NovaLoto
     @POST("ticket/registerNewTicket")
     suspend fun postRegisterTicket(@Body ticketRequest: Play): Response<RequestResponse>

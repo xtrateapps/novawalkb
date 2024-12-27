@@ -28,4 +28,5 @@ object RetrofitInstance {
             .build()
             .create(APIService::class.java)
     }
+
 }

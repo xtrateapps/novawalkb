@@ -12,6 +12,7 @@ import com.novaservices.netwalk.MainActivity
 import com.novaservices.netwalk.databinding.ActivityLoginBinding
 import com.novaservices.netwalk.domain.NovaWalkUser
 import com.novaservices.nova.utils.RetrofitInstance
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -50,7 +51,7 @@ class LoginActivity : AppCompatActivity() {
 //            startActivity(intent)
 //
 
-                GlobalScope.launch(Dispatchers.IO) {
+                CoroutineScope(Dispatchers.IO).launch {
                     val LoginUserResponse = try {
 
                         val newUser = NovaWalkUser(
@@ -85,8 +86,9 @@ class LoginActivity : AppCompatActivity() {
 //                 binding.loginWrapper.visibility = View.VISIBLE
                         return@launch
                     } catch (e: HttpException) {
-//                    binding.loading.visibility = View.GONE
-//                    binding.notLoading.visibility = View.VISIBLE
+                    binding.loading.visibility = View.GONE
+                    binding.notLoading.visibility = View.VISIBLE
+
                         Log.i("Network responses", e.toString())
 //                   binding.loginWrapper.visibility = View.VISIBLE
                         this@LoginActivity.runOnUiThread(Runnable {
