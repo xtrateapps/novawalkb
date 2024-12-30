@@ -1,19 +1,14 @@
 package com.novaservices.netwalk.ui.auth
 
 import android.Manifest
-import android.R.attr.bitmap
-import android.content.Context
-import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import android.view.View
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -51,14 +46,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.novaservices.netwalk.MainActivity
@@ -75,11 +68,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
 import java.io.IOException
-import java.io.OutputStream
-import java.util.UUID
 
 
 class CameraXActivity : ComponentActivity() {
@@ -255,14 +244,18 @@ class CameraXActivity : ComponentActivity() {
 //                    Log.v("new bitmap", encoded)
 //                    longstr = encoded
 
-
+                    val iin = intent
+                    val b = iin.extras
+                    Toast.makeText(this@CameraXActivity, b!!.get("id").toString(), Toast.LENGTH_LONG).show()
                     GlobalScope.launch(Dispatchers.IO) {
+                        val iin = intent
+                        val b = iin.extras
                         val response = try {
                             var new = base64(
                                 BitmaptoBase64(rotatedBitmap),
-                                rotatedBitmap
+                                b!!.get("id").toString()
                             )
-                            RetrofitInstance.api.logd(new)
+                            RetrofitInstance.api.insertProofsInSpecificTicket(new)
                         } catch (error: IOException) {
                             this@CameraXActivity.runOnUiThread(Runnable {
                                 Toast.makeText(

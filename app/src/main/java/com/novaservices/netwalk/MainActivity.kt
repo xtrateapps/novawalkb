@@ -610,8 +610,9 @@ class MainActivity : AppCompatActivity() {
             }
         }
         binding.xcs.setOnClickListener {
-
+//            bundl
             val intent = Intent(this@MainActivity, CameraXActivity::class.java)
+            intent.putExtra("id", resultTicketStatusId);
             startActivity(intent)
         }
         binding.endTicket.setOnClickListener {
@@ -1104,7 +1105,7 @@ class MainActivity : AppCompatActivity() {
             }
             binding.printButton.setOnClickListener {
 
-                printEncabezado()
+//                printEncabezado()
                 printRecibo(
                     "Titulo: ${binding.ticketTitlef.text.toString()}",
                     "Fecha: ${binding.ticketStart.text.toString()}",
@@ -1365,11 +1366,12 @@ class MainActivity : AppCompatActivity() {
                     //pls add the font file in assets folder.
 
 
-                    var linea2 = "Detalle Del Caso\n"
+                    var linea2 = "\n\'Detalle Del Caso\n"
 
 
                     var linea =
                         "`${q}\n\' ${w}\n\' ${e}\n\' ${t}\n\' ${y}\n\' ${u}\n\' ${i}\n\' ${r}\n\' ${o}\n\' ${p}\n\' ${g}\n\' ${zx}\n\' ${sd}\n\' ${xc}\n\' ${cv}\n\' ${x}\n\'`"
+                    printScriptUtil.addText(format, linea)
                     printScriptUtil.addText(format, linea2)
 
                     printScriptUtil.addPaperFeed(4)

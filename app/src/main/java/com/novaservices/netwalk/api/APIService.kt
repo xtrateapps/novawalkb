@@ -60,8 +60,12 @@ suspend fun uploadFile(
 //    )
 //
 
-@POST("log")
-suspend fun logd(@Body ticketRequest: base64): Response<RequestResponse>
+@POST("register-proof-in-ticket")
+suspend fun insertProofsInSpecificTicket(@Body ticketRequest: base64): Response<RequestResponse>
+
+
+
+
 //    Endpoinst NovaLoto
     @POST("ticket/registerNewTicket")
     suspend fun postRegisterTicket(@Body ticketRequest: Play): Response<RequestResponse>
